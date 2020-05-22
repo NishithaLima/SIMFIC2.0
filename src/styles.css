@@ -1,0 +1,91 @@
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+/* You can add global styles to this file, and also import other style files */
+body{
+    background-image: url("assets/img/BookImage.jpg");
+    background-color: #cccccc;
+    height: 100%;
+    /* background-repeat: no-repeat;*/
+    background-size: cover;
+    position: relative;
+   }
+  
+  
+  
+      
+      /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+      .row.content {height: 450px}
+      
+      /* Set gray background color and 100% height */
+      .sidenav {
+        padding-top: 20px;
+        background-color: #f1f1f1;
+        height: 100%;
+      }
+      
+      /* Set black background color, white text and some padding */
+      footer {
+        background-color: #555;
+        color: white;
+        padding: 15px;
+      }
+      
+      /* On small screens, set height to 'auto' for sidenav and grid */
+      @media screen and (max-width: 767px) {
+        .sidenav {
+          height: auto;
+          padding: 15px;
+        }
+        .row.content {height:auto;} 
+      }
+  
+  
+  
+      .ratings i {
+      font-size: 16px;
+      color: red
+  }
+  
+  .strike-text {
+      color: red;
+      text-decoration: line-through
+  }
+  
+  .product-image {
+      width: 80%;
+      padding: 0.7vw;
+  }
+  
+  .dot {
+      height: 7px;
+      width: 7px;
+      margin-left: 6px;
+      margin-right: 6px;
+      margin-top: 3px;
+      background-color: blue;
+      border-radius: 50%;
+      display: inline-block
+  }
+  
+  .spec-1 {
+      font-size: 15px;
+      letter-spacing: .2rem;
+      color: aliceblue;
+  }
+  
+  h5 {
+      font-weight: 400
+  }
+  
+  .para {
+      font-size: 16px
+  }
+           
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.ngx-pagination {
+  margin-left: 0;
+  margin-bottom: 1rem;
+  /* color: blanchedalmond; */
+  background-color: aliceblue;
+  text-align: center;
+}

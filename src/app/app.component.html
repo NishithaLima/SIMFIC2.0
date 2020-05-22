@@ -1,0 +1,187 @@
+<html>
+<head>
+  <style>
+    .ng-autocomplete {
+    width: 90%;
+
+}
+button{
+  height: 40px;
+}
+  </style>
+</head>
+<body>
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/assets/img/IconImage.png" style="padding-top: 0px;"><img src="/assets/img/IconImage.png" alt="Avatar" style="height: 50px"></a>
+          </div>
+          
+          <div class="collapse navbar-collapse" id="myNavbar">
+            <h2 class="navbar-text">SIMFICTION SEARCH ENGINE</h2>
+            <ul class="nav navbar-nav navbar-right">
+              <li data-toggle="modal" data-target="#exampleModalScrollable"><a href="#"><span class="glyphicon glyphicon-new-window"></span> About</a></li>
+              <li><a href="#" (click)="Reset()"><span class="glyphicon glyphicon-repeat"></span> Reset</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+<div class="container" style="padding-top: 1.5vw;">
+  <mat-card>
+  <div class="row">
+    <div class="col-md-4">
+      <select class="form-control selectpicker"  title="Select Genre"  data-live-search="true" (change)="filterChanged($event.target.value)">
+        <option value="" selected disabled>Select Genre *</option>
+        <option *ngFor="let x of genre" value="{{x.name}}" >{{x.name}}</option>
+      </select>
+
+    </div>
+    <!-- <div class="col-md-3">
+      <div class="ng-autocomplete" style="height: 2.2vw;">
+        <ng-autocomplete [data]="authors" [searchKeyword]="keyword"  [itemTemplate]="itemTemplate1"  placeHolder="Authors Name"
+            [notFoundTemplate]="notFoundTemplate" required="true" (selected)='changeBooks($event)'>
+        </ng-autocomplete>
+     
+        <ng-template #itemTemplate1 let-item>
+          <a href="javascript:void(0)">
+              <span [innerHTML]="item"></span>
+          </a>
+      </ng-template>
+     
+        <ng-template #notFoundTemplate let-notFound>
+            <div [innerHTML]="notFound"></div>
+        </ng-template>
+      </div>
+    </div> -->
+    <div class="col-md-6">
+    
+      <div class="ng-autocomplete" style="height: 2.2vw;">
+        <ng-autocomplete [data]="books" [searchKeyword]="keyword"  [itemTemplate]="itemTemplate"  placeHolder="Query Book"
+            [notFoundTemplate]="notFoundTemplate" required="true" (selected)='selectEvent($event)' >
+        </ng-autocomplete>
+     
+        <ng-template #itemTemplate let-item>
+          <a href="#">
+              <span [innerHTML]="item.name"></span> ,
+              <small><span [innerHTML]="item.authorname"></span></small>
+          </a>
+      </ng-template>
+     
+        <ng-template #notFoundTemplate let-notFound>
+            <div [innerHTML]="notFound"></div>
+        </ng-template>
+      </div>
+      <!-- <input type="search" id="bookId" class="form-control" placeholder="Select Book" ng-model="books" ng-keyup="complete(books)"/>
+        <ul class="list-group" ng-model="hidethis" ng-hide="hidethis">
+        <li class="list-group-item" *ngFor="let bookData of filterBooks" ng-click="fillTextBox(bookData.bookName)">{{bookData.bookName}}</li>
+        </ul> -->
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-primary" (click)="myClickFunction()" >
+         Search 
+         <span class="glyphicon glyphicon-search"></span>
+      </button>
+    </div>
+  </div>
+</mat-card>
+<div class='col-md-12'><mat-progress-bar mode="indeterminate" *ngIf="showSpinner"></mat-progress-bar></div>
+
+<div *ngIf="message" [ngClass]="message.cssClass"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>{{message.text}}</div>
+
+<div *ngIf = "!isShow"  id="collapseExample" style="background-color: rgba(0, 0, 0, 0.7);padding-top: 0.5vw;" >
+  <div class="toast">
+      {{globalFeature}}
+  </div>
+  <div class="container mt-5 mb-5">
+   <div class="d-flex justify-content-center row">
+       <div class="col-md-10">
+           <div class="row p-2 bg-white border rounded" *ngFor="let data of dataList  | paginate: { itemsPerPage: 5, currentPage: p }" >
+               <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image"  src="/assets/img/book_covers/{{data.id}}.jpg"></div>
+               <div class="col-md-6 mt-1" style="color: blanchedalmond;">
+                   <h2  class="font-weight-bold" style="color: antiquewhite;padding-top: 1vw;">{{data.name}}</h2>
+                   <div class="d-flex flex-row">
+                       <div ng-repeat="let rat for data.rank"><strong>{{data.rank}} <span class="glyphicon glyphicon-star"></span></strong></div>
+                   </div>
+                   <div class="mt-1 mb-1 spec-1">
+                     <span>Book ID: {{data.id}}</span>
+                     <p class="font-italic">
+                    <span class="dot"></span>
+                    <span>{{data.summary}}</span>
+                    </p>
+                    </div>
+                    
+                   <!-- <div class="mt-1 mb-1 spec-1"><span>{{data.name}}</span>
+                    <span class="dot"></span><span>{{data.name}}</span><span class="dot"></span><span>{{data.name}}<br></span></div>
+                   <p class="font-italic">{{data.summary}}<br><br></p> -->
+               </div>
+               <div class="align-items-center align-content-center col-md-3 border-left mt-1">
+                   <div class="d-flex flex-row align-items-center">
+                       <span class="strike-text">$20.99</span>
+                   </div>
+                   <h6 class="text-success">Free Download</h6>
+                   <div class="d-flex flex-column mt-4">
+                    <button class="btn btn-primary btn-sm" type="button" value="{{data.name}}"  (click) = "show($event)">Summary</button>
+                    <button class="btn btn-outline-primary btn-sm mt-2" type="button">
+                      <a href="{{data.epubPath}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> View</a></button></div>
+               </div>
+           </div>
+       </div>
+   </div>
+  </div>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+ </div>
+</div>
+</body>
+
+
+</html>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalScrollableTitle">About SIMFIC 2.0</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        A QBE book retrieval system built on hand crafted features extracted from English fiction books.System supports users with global textual explanation for top k items in the ranked list.Explanation tells the user what are the important features that are probably responsible </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="myModal" [style.display]="showModal ? 'block' : 'none'">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">{{ bookName }}</h4>
+        <button type="button" class="close" data-dismiss="modal" (click) = "hide()">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        {{ content }}
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click) = "hide()">Close</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+ 
+
+

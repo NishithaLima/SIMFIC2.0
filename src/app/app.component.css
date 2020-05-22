@@ -1,0 +1,66 @@
+ 
+   .container{
+    padding-top: 1.5vw;
+  }
+
+  body {
+    -webkit-user-select: none;
+       -moz-user-select: -moz-none;
+        -ms-user-select: none;
+            user-select: none;
+  }
+   /* Remove the navbar's default margin-bottom and rounded borders */ 
+   .navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+  }
+ 
+  .autocomplete-container .input-container input
+  {
+      height: 2.2vw !important;
+      border-radius: 20px !important;
+  }
+  
+  .mat-card{
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+
+  /* Important part */
+  .modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    letter-spacing: 1px;
+
+}
+.modal-title{
+  margin: auto;
+  font-size: 2vw;
+  position: absolute;
+}
+.ngx-pagination{
+  background-color: (265,265,265,0.5) !important;
+}
+
+
+.toast{
+  font-family: monospace;
+    /* font-style: italic; */
+    color: gainsboro;
+    font-weight: 790;
+    letter-spacing: 0.3rem;
+}
+
+::ng-deep .mat-progress-bar-fill::after {
+  background-color: black;
+}
+
+::ng-deep .mat-progress-bar-buffer {
+  background: #E4E8EB;
+}
+
+
+ 
