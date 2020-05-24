@@ -4,6 +4,8 @@ import { CsvReader, simBooks, bookList, UserEvent} from './csv-reader';
 import { ConfigService }  from './search.service';
 import { trigger, state, animate, transition, style } from '@angular/animations';
 import { Subscription } from 'rxjs';
+import {DomSanitizer} from '@angular/platform-browser';
+
 
 
 
@@ -39,7 +41,7 @@ export class AppComponent implements OnInit{
 
   showSpinner: boolean = false;
 
-  constructor(private http: HttpClient, private configService: ConfigService){
+  constructor(private http: HttpClient, private configService: ConfigService,  private sanitizer:DomSanitizer){
     this.apiUrl = ConfigService.Settings.url.apiUrl;
     this.http.get(this.genreCsvUrl,{responseType: 'text'}).subscribe(data => {
     this.output = data.split(/\r\n|\n/);
@@ -52,6 +54,7 @@ export class AppComponent implements OnInit{
   keyword = 'name'; 
   output = [];
   authors = [];
+  topK:String = '10';
 
   //Urls to fetch CSV file containg genre and book List
   genreCsvUrl = 'assets/csv/GENRE.csv';
@@ -154,7 +157,7 @@ export class AppComponent implements OnInit{
     this.showSpinner = true;
     this.globalFeature = '';
     this.dataList =[];
-    this.http.get<bookList[]>( this.apiUrl + 'simbooks' + '/' + this.queryBookId).subscribe(data =>{
+    this.http.get<bookList[]>( this.apiUrl + 'simbooks' + '/' + this.queryBookId + '/'+ this.topK).subscribe(data =>{
     this.dataList = JSON.parse(JSON.stringify(data["bookUI"]));
     this.globalFeature = data["globalFeature"];
     this.showSpinner = false;
@@ -219,6 +222,13 @@ getArrayNumber = function(num) {
   };
  return array;   
 };
+sanitize(url:string){
+  return this.sanitizer.bypassSecurityTrustUrl(url);
+}
+
+selecttopK(event: any){
+  this.topK = event.target.value;
+}
 
 }
 

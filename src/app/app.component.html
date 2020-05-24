@@ -2,9 +2,11 @@
 <head>
   <style>
     .ng-autocomplete {
-    width: 90%;
-
-}
+    width: 100%;
+    }
+    .bootstrap-select>.dropdown-toggle{
+      height: 40px;
+    }
 button{
   height: 40px;
 }
@@ -53,7 +55,7 @@ button{
         </ng-template>
       </div>
     </div> -->
-    <div class="col-md-6">
+    <div class="col-md-5">
     
       <div class="ng-autocomplete" style="height: 2.2vw;">
         <ng-autocomplete [data]="books" [searchKeyword]="keyword"  [itemTemplate]="itemTemplate"  placeHolder="Query Book"
@@ -76,6 +78,14 @@ button{
         <li class="list-group-item" *ngFor="let bookData of filterBooks" ng-click="fillTextBox(bookData.bookName)">{{bookData.bookName}}</li>
         </ul> -->
     </div>
+     <div class="col-md-1">
+      <select class="selectpicker" data-width="85%" (change)="selecttopK($event)">
+        <option value="5" selected disabled>Top K Results</option>
+        <option value="10" selected="selected" >10</option>
+        <option value="15"  >15</option>
+        <option value="20"  >20</option>
+      </select>
+    </div> 
     <div class="col-md-2">
       <button type="submit" class="btn btn-primary" (click)="myClickFunction()" >
          Search 
@@ -121,7 +131,7 @@ button{
                    <h6 class="text-success">Free Download</h6>
                    <div class="d-flex flex-column mt-4">
                     <button class="btn btn-primary btn-sm" type="button" value="{{data.name}}"  (click) = "show($event)">Summary</button>
-                    <button class="btn btn-outline-primary btn-sm mt-2" type="button">
+                    <button class="btn btn-outline-primary btn-sm mt-2" type="button" (click)="sanitize(data.epubPath)">
                       <a href="{{data.epubPath}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> View</a></button></div>
                </div>
            </div>
