@@ -8,7 +8,7 @@
 .btn{
   height: 40px !important;
 }
-div.btn.dropdown-toggle.btn-default {
+.bootstrap-select>.dropdown-toggle{
   height: 40px !important;
 }
   </style>
@@ -33,7 +33,7 @@ div.btn.dropdown-toggle.btn-default {
   <mat-card>
   <div class="row">
     <div class="col-md-4">
-      <select class="form-control selectpicker"  title="Select Genre"  data-live-search="true" (change)="filterChanged($event.target.value)">
+      <select class="form-control selectpicker"  title="Select Genre"  data-live-search="true" (change)="filterChanged($event.target.value)" style="height: 40px !important;">
         <option value="" selected disabled>Select Genre *</option>
         <option *ngFor="let x of genre" value="{{x.name}}" >{{x.name}}</option>
       </select>
