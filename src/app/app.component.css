@@ -31,9 +31,9 @@
     overflow-y: initial !important
 }
 .modal-body{
-    max-height: calc(100vh - 200px);
-    overflow-y: auto;
-    letter-spacing: 1px;
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+  letter-spacing: 1px;
 
 }
 .modal-title{
