@@ -4,13 +4,11 @@
     .ng-autocomplete {
     width: 100%;
     }
-  
-.btn{
-  height: 40px !important;
-}
-
-button.btn.dropdown-toggle.btn-default{
-  height: 40px !important;
+    .bootstrap-select>.dropdown-toggle{
+      height: 40px;
+    }
+button{
+  height: 40px;
 }
   </style>
 </head>
@@ -34,7 +32,7 @@ button.btn.dropdown-toggle.btn-default{
   <mat-card>
   <div class="row">
     <div class="col-md-4">
-      <select class="form-control selectpicker"  title="Select Genre"  data-live-search="true" (change)="filterChanged($event.target.value)" style="height: 40px !important;">
+      <select class="form-control selectpicker"  title="Select Genre"  data-live-search="true" (change)="filterChanged($event.target.value)">
         <option value="" selected disabled>Select Genre *</option>
         <option *ngFor="let x of genre" value="{{x.name}}" >{{x.name}}</option>
       </select>
@@ -133,8 +131,8 @@ button.btn.dropdown-toggle.btn-default{
                    <h6 class="text-success">Free Download</h6>
                    <div class="d-flex flex-column mt-4">
                     <button class="btn btn-primary btn-sm" type="button" value="{{data.name}}"  (click) = "show($event)">Summary</button>
-                    <button class="btn btn-outline-primary btn-sm mt-2" type="button" (click)="sanitize(data.epubPath)">
-                      <a href="{{data.epubPath}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> View</a></button></div>
+                    <button class="btn btn-outline-primary btn-sm mt-2" type="button" (click)="sanitize(data.id)">
+                      <span class="glyphicon glyphicon-download"></span> Download</button></div>
                </div>
            </div>
        </div>

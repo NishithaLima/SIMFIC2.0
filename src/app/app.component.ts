@@ -55,7 +55,7 @@ export class AppComponent implements OnInit{
   output = [];
   authors = [];
   topK:String = '10';
-
+  
   //Urls to fetch CSV file containg genre and book List
   genreCsvUrl = 'assets/csv/GENRE.csv';
   booksCsvUrl = 'assets/csv/master996.csv';
@@ -223,7 +223,13 @@ getArrayNumber = function(num) {
  return array;   
 };
 sanitize(url:string){
-  return this.sanitizer.bypassSecurityTrustUrl(url);
+  console.log("/app/"+url +".epub");
+  let link = document.createElement("a");
+  link.download = url;
+  link.href = "/app/"+url +".epub" ;
+  link.click();
+  
+  //return this.sanitizer.bypassSecurityTrustUrl(url);
 }
 
 selecttopK(event: any){
