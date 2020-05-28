@@ -223,10 +223,10 @@ getArrayNumber = function(num) {
  return array;   
 };
 sanitize(url:string){
-  console.log("/app/epub/"+url +".epub");
+  console.log("/app/src/assets/epub/"+url +".epub");
   let link = document.createElement("a");
   link.download = url;
-  link.href = "/app/epub/"+url +".epub" ;
+  link.href = "/app/src/assets/epub/"+url +".epub" ;
   link.click();
   
   //return this.sanitizer.bypassSecurityTrustUrl(url);
