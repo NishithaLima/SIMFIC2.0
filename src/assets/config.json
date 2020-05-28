@@ -1,5 +1,5 @@
 {
     "url":{
-    "apiUrl": "http://localhost:8080/"
+    "apiUrl": "https://fiction-app.herokuapp.com/"
     }
 }
