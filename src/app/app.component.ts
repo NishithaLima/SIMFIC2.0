@@ -163,7 +163,7 @@ export class AppComponent implements OnInit{
     this.showSpinner = false;
   },error => {
     console.log(error);
-    this.configService.error("Server Error: " + error.status);
+    this.configService.error("Server Error :(");
     this.loading = false;
     this.isShow = true;
     this.showSpinner = false;
@@ -223,10 +223,10 @@ getArrayNumber = function(num) {
  return array;   
 };
 sanitize(url:string){
-  console.log("/app/src/assets/epub/"+url +".epub");
+  console.log("/assets/epub/"+url +".epub");
   let link = document.createElement("a");
   link.download = url;
-  link.href = "/app/src/assets/epub/"+url +".epub" ;
+  link.href = "/assets/epub/"+url +".epub" ;
   link.click();
   
   //return this.sanitizer.bypassSecurityTrustUrl(url);
