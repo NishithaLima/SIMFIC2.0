@@ -34,8 +34,8 @@ button{
   <div class="row">
     <div class="col-md-4">
       <select class="form-control selectpicker"  title="Select Genre"  data-live-search="true" (change)="filterChanged($event.target.value)">
-        <option value="" selected disabled>Select Genre *</option>
-        <option *ngFor="let x of genre" value="{{x.name}}" >{{x.name}}</option>
+       
+        <option *ngFor="let x of genre" value="{{x.name}}" [selected]="x.name==='All'" >{{x.name}}</option>
       </select>
 
     </div>
@@ -159,7 +159,7 @@ button{
         </button>
       </div>
       <div class="modal-body">
-        A QBE book retrieval system built on hand crafted features extracted from English fiction books.System supports users with global textual explanation for top k items in the ranked list.Explanation tells the user what are the important features that are probably responsible </div>
+        A QBE book retrieval system built on hand crafted features extracted from English fiction books. System supports users with global textual explanation for top k items in the ranked list. Explanation tells the user what are the important features that are probably responsible. </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
       </div>

@@ -110,6 +110,7 @@ export class AppComponent implements OnInit{
 
         this.message = message;
     });
+    this.filterChanged("All");
   }
   getGenreRecordsArrayFromCSVFile(output:any) {  
     let csvArr = [];  
