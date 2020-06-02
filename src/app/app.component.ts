@@ -47,7 +47,7 @@ export class AppComponent implements OnInit{
     this.output = data.split(/\r\n|\n/);
     this.genre = this.getGenreRecordsArrayFromCSVFile(this.output); 
     }); 
-    $('.selectpicker').selectpicker(); 
+    $('.selectpicker').selectpicker('refresh'); 
   }
   
   isShow = true;
@@ -112,7 +112,10 @@ export class AppComponent implements OnInit{
         this.message = message;
     });
     this.filterChanged("All");
-    
+    setTimeout(function () {
+      $('.selectpicker').selectpicker('refresh');
+  },1000)
+  
   }
   getGenreRecordsArrayFromCSVFile(output:any) {  
     let csvArr = [];  
