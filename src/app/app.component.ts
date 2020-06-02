@@ -46,7 +46,8 @@ export class AppComponent implements OnInit{
     this.http.get(this.genreCsvUrl,{responseType: 'text'}).subscribe(data => {
     this.output = data.split(/\r\n|\n/);
     this.genre = this.getGenreRecordsArrayFromCSVFile(this.output); 
-    });  
+    }); 
+    $('.selectpicker').selectpicker(); 
   }
   
   isShow = true;
