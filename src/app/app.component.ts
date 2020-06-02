@@ -8,7 +8,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 
 
 
-
+declare var $: any;
 
 @Component({
   selector: 'app-root',
@@ -111,6 +111,7 @@ export class AppComponent implements OnInit{
         this.message = message;
     });
     this.filterChanged("All");
+    $('.selectpicker').selectpicker();
   }
   getGenreRecordsArrayFromCSVFile(output:any) {  
     let csvArr = [];  
