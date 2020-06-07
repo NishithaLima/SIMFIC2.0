@@ -4,6 +4,7 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {AppRoutingModule } from './app-routing.module';
 import { ConfigService } from './search.service';
 import { AppComponent } from './app.component';
+import { NgxCaptchaModule } from 'ngx-captcha';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule }    from '@angular/common/http';
 import {NgxPaginationModule} from 'ngx-pagination';
@@ -14,7 +15,6 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {MatFormFieldModule} from '@angular/material/form-field'
 import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 export function initConfig(appConfig: ConfigService) {
   return () => appConfig.load();
@@ -31,6 +31,7 @@ export function initConfig(appConfig: ConfigService) {
     AutocompleteLibModule,
     HttpClientModule,
     FormsModule,
+    NgxCaptchaModule,
     ReactiveFormsModule,
     NgxPaginationModule,
     MatBadgeModule,
@@ -39,7 +40,8 @@ export function initConfig(appConfig: ConfigService) {
     MatProgressSpinnerModule,
     MatFormFieldModule,
     BrowserAnimationsModule ,
-    MatProgressBarModule
+    MatProgressBarModule,
+    
   ],
   providers: [
     ConfigService, { provide: APP_INITIALIZER, useFactory: initConfig, deps: [ConfigService], multi: true },

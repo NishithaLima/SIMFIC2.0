@@ -31,6 +31,7 @@
     "express": "^4.17.1",
     "file-saver": "^2.0.2",
     "jquery": "^3.5.1",
+    "ngx-captcha": "^8.0.1",
     "ngx-pagination": "^5.0.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",

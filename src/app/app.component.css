@@ -31,9 +31,9 @@
     overflow-y: initial !important
 }
 .modal-body{
-  max-height: calc(100vh - 300px);
-  overflow-y: auto;
-  letter-spacing: 1px;
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
+    letter-spacing: 1px;
 
 }
 .modal-title{
@@ -52,6 +52,8 @@
     color: gainsboro;
     font-weight: 790;
     letter-spacing: 0.3rem;
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 
 ::ng-deep .mat-progress-bar-fill::after {
@@ -61,6 +63,12 @@
 ::ng-deep .mat-progress-bar-buffer {
   background: #E4E8EB;
 }
+.after_modal_appended
+{  
+  position:relative;
+}
+
+
 
 
  
