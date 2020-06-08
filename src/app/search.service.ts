@@ -31,6 +31,7 @@ export class ConfigService {
                 }
             }
         });
+
     }
     load() {
         const jsonFile = 'assets/config.json';

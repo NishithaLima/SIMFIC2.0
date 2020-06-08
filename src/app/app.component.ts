@@ -39,7 +39,7 @@ export class AppComponent implements OnInit{
   // Variables for Error Loading
   message: any;
   loading = false;
-
+  errormsg:boolean = false;
 
   showSpinner: boolean = false;
 
@@ -142,6 +142,8 @@ export class AppComponent implements OnInit{
     let csvArr = [];  
     for (let i = 1; i < output.length; i++) {  
       let curruntRecord = (<string>output[i]).split(';'); 
+      console.log(curruntRecord[4]);
+      console.log(selectedValue)
       if (curruntRecord.length == headersRow && (curruntRecord[4].trim() == selectedValue.trim() || selectedValue == "All" )) {  
         let csvRecord: CsvReader = new CsvReader();  
         csvRecord.id = i;
@@ -178,14 +180,16 @@ export class AppComponent implements OnInit{
     this.showSpinner = false;
   },error => {
     console.log(error);
-    this.configService.error("Server Error :(");
+    this.errormsg = true;
     this.loading = false;
     this.isShow = true;
     this.showSpinner = false;
     this.globalFeature = '';
   });
  }
-
+ alertClose(){
+  this.errormsg = false;
+ }
  getAuthorsperGenre(output:any,genre:String,headersRow:any){
   let authorsList = [];  
   for (let i = 1; i < output.length; i++) {  

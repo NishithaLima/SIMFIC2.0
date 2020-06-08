@@ -100,7 +100,8 @@ h2{
 </mat-card>
 <div class='col-md-12'><mat-progress-bar mode="indeterminate" *ngIf="showSpinner"></mat-progress-bar></div>
 
-<div *ngIf="message" [ngClass]="message.cssClass"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>{{message.text}}</div>
+<!-- <div *ngIf="message" [ngClass]="message.cssClass"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>{{message.text}}</div> -->
+<div *ngIf="errormsg" class="alert alert-danger fade in"><a href="#" class="close" (click)="alertClose()" aria-label="close">&times;</a>Server error :(</div>
 
 <div *ngIf = "!isShow"  id="collapseExample" style="background-color: rgba(0, 0, 0, 0.7);padding-top: 0.5vw;" >
   <div class="toast">
