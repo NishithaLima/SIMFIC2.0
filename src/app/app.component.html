@@ -40,7 +40,7 @@ h2{
   <mat-card>
   <div class="row">
     <div class="col-md-4">
-      <select class="form-control selectpicker"  title="Select Genre"  data-live-search="true" (change)="filterChanged($event.target.value)">
+      <select class="form-control selectpicker"  title="Select Genre"  data-live-search="true" (change)="filterChanged($event.target.value)" [disabled]="isDisabled">
        
         <option *ngFor="let x of genre" value="{{x.name}}" [selected]="x.name==='All'" >{{x.name}}</option>
       </select>
@@ -65,8 +65,8 @@ h2{
     </div> -->
     <div class="col-md-5">
     
-      <div class="ng-autocomplete" style="height: 2.2vw;">
-        <ng-autocomplete [data]="books" [searchKeyword]="keyword"  [itemTemplate]="itemTemplate"  placeHolder="Query Book"
+      <div class="ng-autocomplete" style="height: 2.2vw;" >
+        <ng-autocomplete #auto [data]="books" [disabled]="isDisabled" [searchKeyword]="keyword"  [itemTemplate]="itemTemplate"  placeHolder="Query Book"
             [notFoundTemplate]="notFoundTemplate" required="true" (selected)='selectEvent($event)' (keyup.enter)="focusableSubmit.click()" >
         </ng-autocomplete>
      
@@ -83,7 +83,7 @@ h2{
       </div>  
     </div>
      <div class="col-md-1">
-      <select class="selectpicker" data-width="85%" (change)="selecttopK($event)">
+      <select class="selectpicker" data-width="85%" (change)="selecttopK($event)" [disabled]="isDisabled">
         <option value="5" selected disabled>Top K Results</option>
         <option value="10" selected="selected" >10</option>
         <option value="15"  >15</option>
@@ -91,7 +91,7 @@ h2{
       </select>
     </div> 
     <div class="col-md-2">
-      <button  #focusableSubmit type="submit" class="btn btn-primary" (click)="myClickFunction()" >
+      <button  #focusableSubmit type="submit" class="btn btn-primary" (click)="myClickFunction()" [disabled]="isDisabled">
          Search 
          <span class="glyphicon glyphicon-search"></span>
       </button>
@@ -100,7 +100,6 @@ h2{
 </mat-card>
 <div class='col-md-12'><mat-progress-bar mode="indeterminate" *ngIf="showSpinner"></mat-progress-bar></div>
 
-<!-- <div *ngIf="message" [ngClass]="message.cssClass"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>{{message.text}}</div> -->
 <div *ngIf="errormsg" class="alert alert-danger fade in"><a href="#" class="close" (click)="alertClose()" aria-label="close">&times;</a>Server error :(</div>
 
 <div *ngIf = "!isShow"  id="collapseExample" style="background-color: rgba(0, 0, 0, 0.7);padding-top: 0.5vw;" >
@@ -123,6 +122,7 @@ h2{
                     <span class="dot"></span>
                     <span>{{data.summary}}</span>
                     </p>
+                    <a (click)="goNext($event)" [attr.data-filedata]="data.id" [attr.data-fileValue]="data.name"> Graphical Comparision</a>
                     </div>
                    <!-- <div class="mt-1 mb-1 spec-1"><span>{{data.name}}</span>
                     <span class="dot"></span><span>{{data.name}}</span><span class="dot"></span><span>{{data.name}}<br></span></div>
@@ -136,27 +136,11 @@ h2{
                    <div class="d-flex flex-column mt-4" style="padding-top: 25%;">
                     <button class="btn btn-primary btn-sm" type="button" value="{{data.name}}" [attr.data-filedata]="data.id" (click) = "show($event)">Summary</button>
                     <button class="btn btn-outline-primary btn-sm mt-2" type="button" value="{{data.name}}"  [attr.data-filedata]="data.id" (click)="sanitize($event)">
-                      <span class="glyphicon glyphicon-download"></span> Download</button></div>
-               </div>
-               <div class="dummy">
-               <div id="testmodal" class="modal fade" role="dialog">
-               <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Modal Header</h4>
-                  </div>
-                  <div class="modal-body">
-                    <p>Some text in the modal.</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  </div>
-                </div>
-               </div>
-               </div>
-              </div>
+                      <span class="glyphicon glyphicon-download"></span> Download</button>
+                      
+                         </div>        
+               </div>          
+             
            </div>           
        </div>
    </div>
@@ -166,8 +150,6 @@ h2{
  <router-outlet></router-outlet> 
 </div>
 </body>
-
-
 </html>
 
 
@@ -182,7 +164,11 @@ h2{
         </button>
       </div>
       <div class="modal-body">
-        A QBE book retrieval system built on hand crafted features extracted from English fiction books. System supports users with global textual explanation for top k items in the ranked list. Explanation tells the user what are the important features that are probably responsible. </div>
+        It is book retrieval system built on hand crafted features extracted from English and German fiction books. System supports users with global textual explanation for top items in the ranked list. Explanation tells the user what are the important features that are probably responsible.
+      Currently system contains toy set data of books. You can select a query book from the dropdown based on Genre. System gives you top relevant books for your selected query book. It also has <u>graphical explaination</u> for each book explaining the emotion distribution curve against query book.
+      <br>
+      <img id="myImg" src="/assets/img/explain.png" style="width: 100%;" alt="Snow">
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
       </div>
@@ -222,9 +208,11 @@ h2{
     <div class="modal-content" style="background-color:rgba(0, 0, 0, 0.8) ;">
       <div class="modal-body text-center">
         <h2 style="font-family: cursive;">WANT TO READ SIMILAR FICTION BOOKS? GET STARTED ....</h2>
+        <h1 style="color: darkgray;">Note: Kindly read <u><b>About</b></u> before proceeding</h1>
         <div style="padding: 10%;padding-left: 24%;"> 
           <ngx-recaptcha2 #captchaElem
           [siteKey]="'6LcXo6oZAAAAAPSBsIknF6j-er0D7cU5Zxb4R1xZ'"
+          6LeOZ4YUAAAAAJ8clQYNtOXNDHsd58KZHyJeILk6
           (success)="handleSuccess($event)"
           [useGlobalDomain]="false">
         </ngx-recaptcha2>
