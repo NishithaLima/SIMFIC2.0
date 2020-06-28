@@ -15,6 +15,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {MatFormFieldModule} from '@angular/material/form-field'
 import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { GraphAnalysisComponent } from './graph-analysis/graph-analysis.component';
 
 export function initConfig(appConfig: ConfigService) {
   return () => appConfig.load();
@@ -22,7 +24,8 @@ export function initConfig(appConfig: ConfigService) {
 
 @NgModule({
   declarations: [
-    AppComponent  
+    AppComponent,
+    GraphAnalysisComponent  
   ],
   entryComponents: [AppComponent],
   imports: [
@@ -41,6 +44,7 @@ export function initConfig(appConfig: ConfigService) {
     MatFormFieldModule,
     BrowserAnimationsModule ,
     MatProgressBarModule,
+    NgxChartsModule
     
   ],
   providers: [

@@ -1,4 +1,4 @@
-import { Component, Injectable, OnInit } from '@angular/core';
+import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CsvReader, simBooks, bookList, UserEvent} from './csv-reader';
 import { ConfigService }  from './search.service';
@@ -7,6 +7,9 @@ import { Subscription } from 'rxjs';
 import {DomSanitizer} from '@angular/platform-browser';
 import {formatDate } from '@angular/common';
 import { ValueConverter } from '@angular/compiler/src/render3/view/template';
+import { Routes, Router } from '@angular/router';
+import { GraphAnalysisComponent } from './graph-analysis/graph-analysis.component';
+
 
 
 
@@ -33,6 +36,7 @@ declare var $: any;
 })
 
 export class AppComponent implements OnInit{
+  @ViewChild('auto') auto;
   title = 'FictionUI';
   apiUrl:String;
   private subscription: Subscription;
@@ -40,10 +44,16 @@ export class AppComponent implements OnInit{
   message: any;
   loading = false;
   errormsg:boolean = false;
-
+  isDisabled:boolean = false;
   showSpinner: boolean = false;
+  currentBookId: String;
+  currentBookName: String;
 
-  constructor(private http: HttpClient, private configService: ConfigService,  private sanitizer:DomSanitizer){
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService,
+    private sanitizer:DomSanitizer,
+    private router: Router){
     this.apiUrl = ConfigService.Settings.url.apiUrl;
     this.http.get(this.genreCsvUrl,{responseType: 'text'}).subscribe(data => {
     this.output = data.split(/\r\n|\n/);
@@ -69,6 +79,7 @@ export class AppComponent implements OnInit{
   genre =[];
   public books = [];
   queryBookId: String;
+  queryBookName: String;
   genreName: String;
   globalFeature: String;
   public dataList:simBooks[] = new Array();
@@ -94,6 +105,7 @@ export class AppComponent implements OnInit{
 
     selectEvent(item) {
       this.queryBookId = item.bookId.replace('.epub', '');
+      this.queryBookName = item.name;
     }
 
     changeBooks(item){
@@ -142,8 +154,6 @@ export class AppComponent implements OnInit{
     let csvArr = [];  
     for (let i = 1; i < output.length; i++) {  
       let curruntRecord = (<string>output[i]).split(';'); 
-      console.log(curruntRecord[4]);
-      console.log(selectedValue)
       if (curruntRecord.length == headersRow && (curruntRecord[4].trim() == selectedValue.trim() || selectedValue == "All" )) {  
         let csvRecord: CsvReader = new CsvReader();  
         csvRecord.id = i;
@@ -190,6 +200,7 @@ export class AppComponent implements OnInit{
  alertClose(){
   this.errormsg = false;
  }
+
  getAuthorsperGenre(output:any,genre:String,headersRow:any){
   let authorsList = [];  
   for (let i = 1; i < output.length; i++) {  
@@ -273,6 +284,14 @@ handleSuccess(e) {
     $("#recaptchModal").modal('hide');
    }, 2000); 
 
+}
+
+goNext(event) {
+  this.isShow =true;
+  this.isDisabled = true;
+  this.currentBookId = event.target.getAttribute('data-filedata');
+  this.currentBookName =  event.target.getAttribute('data-fileValue');
+  this.router.navigate(['/graph']);
 }
 
 }

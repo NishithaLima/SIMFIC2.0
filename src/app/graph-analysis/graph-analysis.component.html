@@ -1,0 +1,42 @@
+
+<style>
+   
+  .ngx-charts{fill: blanchedalmond !important;}
+</style>
+
+
+<div class="col-md-12 align-content-center" style="background-color: rgba(0, 0, 0, 0.8);padding-left: 5%;padding-top: 2%;">
+ <div class="text-center">
+   <a (click)="goback()">  
+     <span class="glyphicon glyphicon-arrow-left"></span> Back to Search Results</a>
+ </div>
+ <h2>Graphical Comparision of Emotions distributed over books</h2>
+   <div class="col-md-10">
+   <ngx-charts-line-chart style="fill: aliceblue;"
+ [view]="view"
+ [scheme]="colorScheme"
+ [legend]="legend"
+ [legendTitle] ="legendTitle"
+ [showXAxisLabel]="showXAxisLabel"
+ [showYAxisLabel]="showYAxisLabel"
+ [showGridLines]="showGridLines"
+ [xAxis]="xAxis"
+ [yAxis]="yAxis"
+ [xAxisLabel]="xAxisLabel"
+ [yAxisLabel]="yAxisLabel"
+ [timeline]="timeline"
+ [trimXAxisTicks] ="trimXAxisTicks"
+ [results]="multi"
+ [legendPosition] = "legendPosition"
+ (select)="onSelect($event)"
+ (activate)="onActivate($event)"
+ (deactivate)="onDeactivate($event)"
+ >
+</ngx-charts-line-chart>
+</div>
+<!-- <div>
+ <angular-tag-cloud [data]="data" [zoomOnHover]="zoomOnHoverOptions"></angular-tag-cloud>
+</div> -->
+</div>
+
+

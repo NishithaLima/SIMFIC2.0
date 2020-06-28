@@ -38,4 +38,13 @@ export class Config {
 }
 
 
+export class GraphData{
+	public name: any;
+	public value: any;
+}
+
+export class GraphList{
+	public name: any;
+	public series: Array<GraphData>;
+}
 
