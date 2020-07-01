@@ -17,6 +17,8 @@ import {MatFormFieldModule} from '@angular/material/form-field'
 import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { GraphAnalysisComponent } from './graph-analysis/graph-analysis.component';
+import { TagCloudModule } from 'angular-tag-cloud-module';
+import {MatRadioModule} from '@angular/material/radio';
 
 export function initConfig(appConfig: ConfigService) {
   return () => appConfig.load();
@@ -44,7 +46,9 @@ export function initConfig(appConfig: ConfigService) {
     MatFormFieldModule,
     BrowserAnimationsModule ,
     MatProgressBarModule,
-    NgxChartsModule
+    NgxChartsModule,
+    MatRadioModule,
+    TagCloudModule
     
   ],
   providers: [

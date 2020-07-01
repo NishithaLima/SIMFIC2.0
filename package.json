@@ -25,6 +25,7 @@
     "@swimlane/ngx-charts": "^14.0.0",
     "@types/file-saver": "^2.0.1",
     "angular-ng-autocomplete": "^2.0.1",
+    "angular-tag-cloud-module": "^5.0.0",
     "bootstrap": "^3.4.1",
     "bootstrap-select": "^1.13.17",
     "csv-parser": "^2.3.2",

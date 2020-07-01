@@ -37,7 +37,6 @@ export class Config {
     };
 }
 
-
 export class GraphData{
 	public name: any;
 	public value: any;
@@ -47,4 +46,17 @@ export class GraphList{
 	public name: any;
 	public series: Array<GraphData>;
 }
+
+export class GlobalFeatureArray{
+	public name:any;
+	public tooltip:String;
+}
+
+export class WordCloudData{
+	public text: String;
+	public weight: number;
+	public color:string;
+}
+
+
 

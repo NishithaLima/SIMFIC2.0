@@ -10,17 +10,11 @@
 button{
   height: 40px;
 }
-h1{
-    margin: 10px;
-}
-h2{
-  color: azure;
-}
-
 
   </style>
 </head>
 <body>
+  <mat-progress-bar  mode="indeterminate" *ngIf="showSpinner"></mat-progress-bar>
       <nav class="navbar navbar-inverse">
         <div class="container-fluid">
           <div class="navbar-header">
@@ -36,8 +30,15 @@ h2{
           </div>
         </div>
       </nav>
+
+
 <div class="container" style="padding-top: 1.5vw;">
   <mat-card>
+    <!--<mat-radio-group aria-label="Select an option" (change)="languageChange($event)" style="color: black;letter-spacing: 0.2em;"> Language of Book:
+      <mat-radio-button value="en" selected>English</mat-radio-button>
+      <mat-radio-button value="de">German</mat-radio-button>
+      <mat-radio-button value="" checked>Both</mat-radio-button>
+    </mat-radio-group>-->
   <div class="row">
     <div class="col-md-4">
       <select class="form-control selectpicker"  title="Select Genre"  data-live-search="true" (change)="filterChanged($event.target.value)" [disabled]="isDisabled">
@@ -46,23 +47,7 @@ h2{
       </select>
 
     </div>
-    <!-- <div class="col-md-3">
-      <div class="ng-autocomplete" style="height: 2.2vw;">
-        <ng-autocomplete [data]="authors" [searchKeyword]="keyword"  [itemTemplate]="itemTemplate1"  placeHolder="Authors Name"
-            [notFoundTemplate]="notFoundTemplate" required="true" (selected)='changeBooks($event)'>
-        </ng-autocomplete>
-     
-        <ng-template #itemTemplate1 let-item>
-          <a href="javascript:void(0)">
-              <span [innerHTML]="item"></span>
-          </a>
-      </ng-template>
-     
-        <ng-template #notFoundTemplate let-notFound>
-            <div [innerHTML]="notFound"></div>
-        </ng-template>
-      </div>
-    </div> -->
+  
     <div class="col-md-5">
     
       <div class="ng-autocomplete" style="height: 2.2vw;" >
@@ -98,56 +83,63 @@ h2{
     </div>
   </div>
 </mat-card>
-<div class='col-md-12'><mat-progress-bar mode="indeterminate" *ngIf="showSpinner"></mat-progress-bar></div>
+
 
 <div *ngIf="errormsg" class="alert alert-danger fade in"><a href="#" class="close" (click)="alertClose()" aria-label="close">&times;</a>Server error :(</div>
-
-<div *ngIf = "!isShow"  id="collapseExample" style="background-color: rgba(0, 0, 0, 0.7);padding-top: 0.5vw;" >
-  <div class="toast">
-      {{globalFeature}}
+<router-outlet></router-outlet> 
+<div *ngIf = "!isShow"  id="collapseExample" style="background-image: linear-gradient(#fff 65%, #e6e6e6);padding-top: 0.5vw;" >
+  <div class="toast" >Why these books are related?
+    <a *ngFor="let g of globalFeatureList" data-toggle="tooltip" data-placement="bottom" title="{{g.tooltip}}"> 
+      {{ g.name }}
+    </a>
   </div>
   <div class="container mt-5 mb-5">
    <div class="d-flex justify-content-center row">
        <div class="col-md-10">
            <div class="row p-2 bg-white border rounded" *ngFor="let data of dataList  | paginate: { itemsPerPage: 5, currentPage: p }" >
                <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image"  src="/assets/img/book_covers/{{data.id}}.jpg"></div>
-               <div class="col-md-6 mt-1" style="color: blanchedalmond;">
-                   <h2  class="font-weight-bold" style="color: antiquewhite;padding-top: 1vw;">{{data.name}}</h2>
+               <div class="col-md-8 mt-1">
+                   <h2  class="font-weight-bold" >{{data.name}}</h2>
                    <div class="d-flex flex-row">
-                       <div ng-repeat="let rat for data.rank"><strong>{{data.rank}} <span class="glyphicon glyphicon-star"></span></strong></div>
+                     <span *ngFor="let star of getNumber(data.rank)" class="glyphicon glyphicon-star"></span>
                    </div>
                    <div class="mt-1 mb-1 spec-1">
-                     <!-- <span>Book ID: {{data.id}}</span> -->
                      <p class="font-italic">
                     <span class="dot"></span>
                     <span>{{data.summary}}</span>
                     </p>
+                    Discover more here....
+                    <br>
                     <a (click)="goNext($event)" [attr.data-filedata]="data.id" [attr.data-fileValue]="data.name"> Graphical Comparision</a>
+                    <br>
+                    <a  [attr.value]="data.name" [attr.data-filedata]="data.id" data-toggle="collapse" aria-expanded="false"  (click) = "show($event)">Read more</a>
+                    <div class="col-md-12">
+                      <div class="collapse" id="{{data.id}}">
+                        <div class="card">
+                          {{data.htmlPath}}
+                        </div>
+                      </div>    
+                     </div>     
                     </div>
-                   <!-- <div class="mt-1 mb-1 spec-1"><span>{{data.name}}</span>
-                    <span class="dot"></span><span>{{data.name}}</span><span class="dot"></span><span>{{data.name}}<br></span></div>
-                   <p class="font-italic">{{data.summary}}<br><br></p> -->
                </div>
-               <div class="align-items-center align-content-center col-md-3 border-left mt-1">
-                   <div class="d-flex flex-row align-items-center">
-                       <span class="strike-text"></span>
-                   </div>
+               <div class="align-items-center align-content-center col-md-1 border-left mt-1">
                    <!--<h6 class="text-success" style="padding-top: 1.5vw;">Free Download</h6>-->
-                   <div class="d-flex flex-column mt-4" style="padding-top: 25%;">
-                    <button class="btn btn-primary btn-sm" type="button" value="{{data.name}}" [attr.data-filedata]="data.id" (click) = "show($event)">Summary</button>
+                   <div class="d-flex flex-column mt-4" style="padding-top: 5vw;">
                     <button class="btn btn-outline-primary btn-sm mt-2" type="button" value="{{data.name}}"  [attr.data-filedata]="data.id" (click)="sanitize($event)">
                       <span class="glyphicon glyphicon-download"></span> Download</button>
                       
-                         </div>        
-               </div>          
-             
+                         </div> 
+                            
+               </div>  
+                
+               
            </div>           
        </div>
    </div>
   </div>
   <pagination-controls (pageChange)="p = $event"></pagination-controls>
  </div>
- <router-outlet></router-outlet> 
+ 
 </div>
 </body>
 </html>
@@ -176,39 +168,14 @@ h2{
   </div>
 </div>
 
-<!-- The Modal to show summary -->
-<div class="modal collapse" id="myModal" [style.display]="showModal ? 'block' : 'none'">
-  <div class="modal-dialog" style="width: 75%;">
-    <div class="modal-content">
-    
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">{{ bookName }}</h4>
-        <button type="button" class="close" data-dismiss="modal" (click) = "hide()">&times;</button>
-      </div>
-      
-      <!-- Modal body -->
-      <div class="modal-body">
-        {{ content }}
-      </div>
-      
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" (click) = "saveUserClickEvent()">Close</button>
-      </div>
-      
-    </div>
-  </div>
-</div>
 
 
 <!-- Modal for recaptcha -->
 <div  class="modal fade" id="recaptchModal" tabindex="-1" role="dialog" aria-labelledby="reCaptchaTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static" style="padding-top: 5vw;">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content" style="background-color:rgba(0, 0, 0, 0.8) ;">
+    <div class="modal-content" style="background-image: linear-gradient(#fff 65%, #e6e6e6) ;">
       <div class="modal-body text-center">
         <h2 style="font-family: cursive;">WANT TO READ SIMILAR FICTION BOOKS? GET STARTED ....</h2>
-        <h1 style="color: darkgray;">Note: Kindly read <u><b>About</b></u> before proceeding</h1>
         <div style="padding: 10%;padding-left: 24%;"> 
           <ngx-recaptcha2 #captchaElem
           [siteKey]="'6LcXo6oZAAAAAPSBsIknF6j-er0D7cU5Zxb4R1xZ'"

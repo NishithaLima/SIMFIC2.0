@@ -3,16 +3,14 @@
    
   .ngx-charts{fill: blanchedalmond !important;}
 </style>
-
-
-<div class="col-md-12 align-content-center" style="background-color: rgba(0, 0, 0, 0.8);padding-left: 5%;padding-top: 2%;">
+<div  *ngIf = "showContent" class="col-md-12 align-content-center" style="background-image: linear-gradient(#fff 65%, #e6e6e6);padding-left: 5%;padding-top: 2%;">
  <div class="text-center">
    <a (click)="goback()">  
      <span class="glyphicon glyphicon-arrow-left"></span> Back to Search Results</a>
  </div>
  <h2>Graphical Comparision of Emotions distributed over books</h2>
    <div class="col-md-10">
-   <ngx-charts-line-chart style="fill: aliceblue;"
+   <ngx-charts-line-chart 
  [view]="view"
  [scheme]="colorScheme"
  [legend]="legend"
@@ -34,9 +32,16 @@
  >
 </ngx-charts-line-chart>
 </div>
-<!-- <div>
- <angular-tag-cloud [data]="data" [zoomOnHover]="zoomOnHoverOptions"></angular-tag-cloud>
-</div> -->
+<div class="col-md-10">
+ <h2>Topic Models Represented in Word Cloud </h2>
+ <angular-tag-cloud 
+ [data]="topicdata" 
+ [width]="options.width"
+ [height]="options.height"
+ [overflow]="options.overflow" 
+ [zoomOnHover]="zoomOnHoverOptions">
+</angular-tag-cloud>
+</div> 
 </div>
 
 

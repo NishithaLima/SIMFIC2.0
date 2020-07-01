@@ -1,7 +1,7 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 /* You can add global styles to this file, and also import other style files */
 body{
-    background-image: url("assets/img/BookImage.jpg");
+    background-image: url("assets/img/BookImage1.jpg");
     background-color: #cccccc;
     height: 100%;
     /* background-repeat: no-repeat;*/
@@ -21,6 +21,9 @@ body{
         background-color: #f1f1f1;
         height: 100%;
       }
+      .navbar-inverse .navbar-nav>li>a {
+        color: black;
+    }
       
       /* Set black background color, white text and some padding */
       footer {
@@ -53,6 +56,7 @@ body{
   .product-image {
       width: 80%;
       padding: 0.7vw;
+      box-shadow: 10px 10px 5px grey;
   }
   
   .dot {
@@ -67,9 +71,10 @@ body{
   }
   
   .spec-1 {
-      font-size: 15px;
-      letter-spacing: .2rem;
-      color: aliceblue;
+    font-size: 17px;
+    letter-spacing: .2rem;
+    color: black;
+    font-family: "Merriweather", "Georgia", serif;
   }
   
   h5 {
@@ -89,3 +94,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background-color: aliceblue;
   text-align: center;
 }
+
+.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+  opacity: 0 !important; /*click effect color change*/
+  background-color:black !important;  }
+  
+  .mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: black !important; /*inner circle color change*/  }
+  
+  .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color:black !important; /*outer ring color change*/  }
+
+  .mat-radio-button.mat-accent{
+    padding: 0.5vw;
+  }
+  @font-face {
+    font-family: 'SpecialElite';
+    src: url("assets/fonts/Special_Elite/SpecialElite-Regular.ttf")  format("truetype");
+  }

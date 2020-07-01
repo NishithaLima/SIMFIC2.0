@@ -1,15 +1,12 @@
-import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
+import { Component, Injectable, OnInit, ViewChild, Input , EventEmitter} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CsvReader, simBooks, bookList, UserEvent} from './csv-reader';
+import { CsvReader, simBooks, bookList, UserEvent, GlobalFeatureArray} from './csv-reader';
 import { ConfigService }  from './search.service';
 import { trigger, state, animate, transition, style } from '@angular/animations';
-import { Subscription } from 'rxjs';
-import {DomSanitizer} from '@angular/platform-browser';
-import {formatDate } from '@angular/common';
-import { ValueConverter } from '@angular/compiler/src/render3/view/template';
+import { Subscription,Observable } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Routes, Router } from '@angular/router';
-import { GraphAnalysisComponent } from './graph-analysis/graph-analysis.component';
-
+import { MatRadioChange, MatRadioButton} from '@angular/material/radio';
 
 
 
@@ -35,13 +32,15 @@ declare var $: any;
   providedIn: 'root'
 })
 
+
 export class AppComponent implements OnInit{
-  @ViewChild('auto') auto;
+  @ViewChild('auto') auto; 
+  @Input() checked: Boolean
   title = 'FictionUI';
   apiUrl:String;
   private subscription: Subscription;
   // Variables for Error Loading
-  message: any;
+
   loading = false;
   errormsg:boolean = false;
   isDisabled:boolean = false;
@@ -58,7 +57,8 @@ export class AppComponent implements OnInit{
     this.http.get(this.genreCsvUrl,{responseType: 'text'}).subscribe(data => {
     this.output = data.split(/\r\n|\n/);
     this.genre = this.getGenreRecordsArrayFromCSVFile(this.output); 
-    });  
+    }); 
+  
     $('.selectpicker').selectpicker('refresh');
   }
   
@@ -81,12 +81,14 @@ export class AppComponent implements OnInit{
   queryBookId: String;
   queryBookName: String;
   genreName: String;
-  globalFeature: String;
+  public globalFeatureList = [];
   public dataList:simBooks[] = new Array();
   userEvents: UserEvent = new UserEvent();
   showModal: boolean;
   content: string;
   bookName: string;
+  selecteValue:string;
+  gexplain:String[];
 
   showCaptcha:boolean = true;
  
@@ -115,20 +117,7 @@ export class AppComponent implements OnInit{
     }
 
   ngOnInit(): void {
-  
-    this.subscription = this.configService.getAlert()
-    .subscribe(message => {
-        switch (message && message.type) {
-            case 'success':
-                message.cssClass = 'alert alert-success';
-                break;
-            case 'error':
-                message.cssClass = 'alert alert-danger fade in';
-                break;
-        }
-
-        this.message = message;
-    });
+    
     this.filterChanged("All");
 
     setTimeout(function () {
@@ -136,6 +125,7 @@ export class AppComponent implements OnInit{
   },1000)
 
     $("#recaptchModal").modal('show');
+   
    
   }
   getGenreRecordsArrayFromCSVFile(output:any) {  
@@ -182,11 +172,13 @@ export class AppComponent implements OnInit{
     this.loading = true;
     this.isShow = false;
     this.showSpinner = true;
-    this.globalFeature = '';
+    this.globalFeatureList = [];
     this.dataList =[];
-    this.http.get<bookList[]>( this.apiUrl + 'simbooks' + '/' + this.queryBookId + '/'+ this.topK).subscribe(data =>{
+    this.http.get<bookList[]>( this.apiUrl + 'simbooks' + '/' + this.queryBookId + '/'+ this.topK + '/' + 'system').subscribe(data =>{
     this.dataList = JSON.parse(JSON.stringify(data["bookUI"]));
-    this.globalFeature = data["globalFeature"];
+    let testStr  = data["globalFeature"];
+    this.globalFeatureList = this.getinfo(testStr);
+    console.log(this.globalFeatureList);
     this.showSpinner = false;
   },error => {
     console.log(error);
@@ -194,7 +186,7 @@ export class AppComponent implements OnInit{
     this.loading = false;
     this.isShow = true;
     this.showSpinner = false;
-    this.globalFeature = '';
+    this.globalFeatureList = [];
   });
  }
  alertClose(){
@@ -223,29 +215,32 @@ export class AppComponent implements OnInit{
  //Bootstrap Modal Open event
 show(event)
 {
-  console.log("summary is clicked");
-  this.showModal = true; // Show-Hide Modal Check
   let bookId = event.target.getAttribute('data-filedata');
-  this.bookName = event.target.value;    // Dynamic Data
-  this.http.get(this.summaryUrl+ bookId+'.txt', { responseType: 'text'}).subscribe(
-    data => this.content = data,
-    error => this.configService.error("No Summary Data")
-)
-  $("#myModal").modal('show');
+  let buttonText: String = event.target.textContent;
+  console.log('ButtonText :',buttonText);
+  if(buttonText.trim() == "Read more")
+  {
+  event.target.textContent = "Read less";
+  this.bookName = event.target.getAttribute('value');    // Dynamic Data
   this.userEventData = this.uid +','+ this.queryBookId + ',' + this.genreName + ',' + this.bookName +',' +  (new Date()).toString() ;
+  } 
+  else
+  {
+    event.target.textContent = "Read more";
+    $("#"+bookId).collapse('toggle');
+    this.saveUserClickEvent();
+  }
+  $("#"+bookId).collapse('toggle');
+
 }
-//Bootstrap Modal Close event
-hide()
-{
-  this.showModal = false;
-}
+
 saveUserClickEvent()
 {
   this.showModal = false;
   let temp: String;
-  temp = this.userEventData +',' +  (new Date()).toString() + ';';
+  temp =  this.userEventData +',' +  (new Date()).toString() + ';';
   this.configService.updateUserClickEvents(temp,this.apiUrl).subscribe(
-    data => console.log(data),
+    data => console.log(temp),
     error => console.log(error));
   this.userEventData = '';
 }
@@ -282,6 +277,7 @@ handleSuccess(e) {
   console.log("Uid: ", this.uid);
   setTimeout(() => {
     $("#recaptchModal").modal('hide');
+    $("#exampleModalScrollable").modal('show');
    }, 2000); 
 
 }
@@ -293,6 +289,57 @@ goNext(event) {
   this.currentBookName =  event.target.getAttribute('data-fileValue');
   this.router.navigate(['/graph']);
 }
+
+languageChange(event) {
+ 
+  let mrButton: MatRadioButton = event.source;
+  console.log(mrButton.value);
+  console.log(mrButton.checked);
+  console.log(mrButton.inputId);
+} 
+
+getinfo(testStr:String){
+  let tempList =[];
+  let gtemp = (testStr.substring(testStr.indexOf('?') + 1)).split(',');
+  console.log(gtemp);
+  if( tempList.length != null){
+  for (let i = 0; i < gtemp.length; i++)
+    {
+      if(i == 0){
+        let global: GlobalFeatureArray = new GlobalFeatureArray();
+      global.name = gtemp[i];
+      global.tooltip = this.configService.getGlobalFeatureExplaination(gtemp[i]);
+      tempList.push(global);
+      }
+      else {
+      let global: GlobalFeatureArray = new GlobalFeatureArray();
+      global.name = ','+gtemp[i];
+      global.tooltip = this.configService.getGlobalFeatureExplaination(gtemp[i]);
+      tempList.push(global); 
+      }
+    }
+    return tempList; 
+  }
+}
+public getsummary(): Observable<any>{
+  return  this.http.get(this.summaryUrl,{responseType: 'text'});
+}
+getNumber = function(num) {
+  let i = this.topK ;
+  if(i == 10)
+  {
+    return new Array(11 -num);  
+  }
+  else if(i == 15)
+  {
+    return new Array(16-num);
+  }
+  else if(i == 20){
+    return new Array(21-num);
+  }
+   
+}
+
 
 }
 

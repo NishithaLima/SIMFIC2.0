@@ -13,6 +13,12 @@
    .navbar {
     margin-bottom: 0;
     border-radius: 0;
+    background-color: #F4F1EA;border-color: #F4F1EA;
+    color: black;
+  }
+  .navbar-text{
+    color: black;
+    font-family: 'SpecialElite';
   }
  
   .autocomplete-container .input-container input
@@ -22,7 +28,10 @@
   }
   
   .mat-card{
-    background-color: rgba(0, 0, 0, 0.4);
+    background-image: linear-gradient(#fff 65%, #e6e6e6);
+    font-family: 'Merriweather', 'Georgia','serif';
+    letter-spacing: 0.1em;
+    
   }
 
 
@@ -31,7 +40,7 @@
     overflow-y: initial !important
 }
 .modal-body{
-    max-height: calc(100vh - 300px);
+    /*max-height: calc(100vh - 300px);*/
     overflow-y: auto;
     letter-spacing: 1px;
 
@@ -47,9 +56,9 @@
 
 
 .toast{
-  font-family: monospace;
+  font-family:  "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;;
     /* font-style: italic; */
-    color: gainsboro;
+    color: black;
     font-weight: 790;
     letter-spacing: 0.3rem;
     margin-left: 1vw;
@@ -68,7 +77,26 @@
   position:relative;
 }
 
+::ng-deep .mat-radio-button .ng-tns-c82-0 .mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: white !important;
+}
 
+h1{
+  margin: 10px;
+}
+h2{
+color: black;
+}
+.font-weight-bold{
+  color: #333333;
+  font-family: 'Merriweather', 'Georgia','serif';
+  padding-top: 1vw;
+  font-weight: 800;
+}
+.card {
+  color: #333333;
+  font-family: "Lato", "Helvetica Neue", "Helvetica", sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+}
 
-
- 
