@@ -88,7 +88,7 @@ button{
 <div *ngIf="errormsg" class="alert alert-danger fade in"><a href="#" class="close" (click)="alertClose()" aria-label="close">&times;</a>Server error :(</div>
 <router-outlet></router-outlet> 
 <div *ngIf = "!isShow"  id="collapseExample" style="background-image: linear-gradient(#fff 65%, #e6e6e6);padding-top: 0.5vw;" >
-  <div class="toast" >Why these books are related?
+  <div class="toast" >Why are these books related?
     <a *ngFor="let g of globalFeatureList" data-toggle="tooltip" data-placement="bottom" title="{{g.tooltip}}"> 
       {{ g.name }}
     </a>
@@ -108,7 +108,7 @@ button{
                     <span class="dot"></span>
                     <span>{{data.summary}}</span>
                     </p>
-                    Discover more here....
+                    Discover more here
                     <br>
                     <a (click)="goNext($event)" [attr.data-filedata]="data.id" [attr.data-fileValue]="data.name"> Graphical Comparision</a>
                     <br>
