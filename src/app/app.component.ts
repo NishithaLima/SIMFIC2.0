@@ -170,7 +170,6 @@ export class AppComponent implements OnInit{
   myClickFunction() {
    this.p = 1;
     this.loading = true;
-    this.isShow = false;
     this.showSpinner = true;
     this.globalFeatureList = [];
     this.dataList =[];
@@ -180,6 +179,7 @@ export class AppComponent implements OnInit{
     this.globalFeatureList = this.getinfo(testStr);
     console.log(this.globalFeatureList);
     this.showSpinner = false;
+    this.isShow = false;
   },error => {
     console.log(error);
     this.errormsg = true;
