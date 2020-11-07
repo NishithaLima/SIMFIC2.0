@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { Routes, Router } from '@angular/router';
-import { AppComponent } from  '../app.component';
+import { AppComponent } from '../app.component';
 import { HttpClient } from '@angular/common/http';
 import { GraphList, GraphData, WordCloudData } from '../csv-reader';
-import { ConfigService }  from '../search.service';
-import { CloudData, ZoomOnHoverOptions ,CloudOptions} from 'angular-tag-cloud-module';
+import { ConfigService } from '../search.service';
+import { CloudData, ZoomOnHoverOptions, CloudOptions } from 'angular-tag-cloud-module';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -36,12 +35,14 @@ export class GraphAnalysisComponent {
     { text: 'length', weight: 2 },
     { text: 'letter', weight: 1 },
     { text: 'investigation', weight: 10 },
-    { text: 'client', weight:12 }
+    { text: 'client', weight: 12 }
     // ...
   ];
   topicdata = [];
-  grapgListUrl = 'assets/csv/milestone3_emo_features.csv'
-  topicsURL = 'assets/csv/topics_df.csv'
+  grapgListUrl = 'assets/csv/emotion_graphs_combined.csv'
+  topicsURL = 'assets/csv/topics_df_combined.csv'
+  grapgListUrl_ = 'assets/csv/pivoted_emotions_per_time.csv'
+
 
   multi: any[];
   view: any[] = [1000, 600];
@@ -58,33 +59,33 @@ export class GraphAnalysisComponent {
   xAxisLabel: string = 'Narrative time';
   yAxisLabel: string = 'Collective emotions';
   timeline: boolean = true;
-  showGridLines:boolean = false;
+  showGridLines: boolean = false;
   legendTitle = "Books"
   trimXAxisTicks: boolean = true;
-  showContent:boolean = false;
-  
+  showContent: boolean = false;
+
 
   colorScheme = {
     domain: ['#6b8e23', '#191970', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']
   };
 
-  constructor(private router: Router,private app:AppComponent,private http: HttpClient,private configService:ConfigService) {
+  constructor(private router: Router, private app: AppComponent, private http: HttpClient, private configService: ConfigService) {
     //Object.assign(this, { multi });
     //console.log(multi);
-    
+
     this.app.showSpinner = true;
     this.getTopics().subscribe(data => {
-        let output = (<string>data).split(/\r\n|\n/);
-        this.topicdata = this.getTopicsList(output,this.app.queryBookId,this.app.currentBookId)
-        this.app.showSpinner = false;
-        this.showContent = true;
-     },error => {
-       this.app.showSpinner =false;
-       this.app.errormsg = true;
-       this.showContent = false;
-     });
-     this.getGraphDatafromCsv(this.app.currentBookId);
-    
+      let output = (<string>data).split(/\r\n|\n/);
+      this.topicdata = this.getTopicsList(output, this.app.queryBookId, this.app.currentBookId)
+      this.app.showSpinner = false;
+      this.showContent = true;
+    }, error => {
+      this.app.showSpinner = false;
+      this.app.errormsg = true;
+      this.showContent = false;
+    });
+    this.getGraphDatafromCsv(this.app.currentBookId);
+
   }
 
   onSelect(data): void {
@@ -99,7 +100,7 @@ export class GraphAnalysisComponent {
     console.log('Deactivate', JSON.parse(JSON.stringify(data)));
   }
 
-  goback(){
+  goback() {
     this.app.showSpinner = true;
     this.router.navigate([''])
     this.app.isShow = false;
@@ -107,83 +108,105 @@ export class GraphAnalysisComponent {
     this.app.isDisabled = false;
   }
 
-  getGraphDatafromCsv(bookId:String)
-  {
-    console.log("QueryBookID: ",this.app.queryBookId);
+  getGraphDatafromCsv(bookId: String) {
+    console.log("QueryBookID: ", this.app.queryBookId);
     console.log("CurrentBookID: ", bookId);
-    let queryBookId = this.app.queryBookId ;
+    let queryBookId = this.app.queryBookId;
     let queryBookName = this.app.queryBookName;
     let bookName = this.app.currentBookName;
-    this.http.get(this.grapgListUrl,{responseType: 'text'}).subscribe(data => {
+    this.http.get(this.grapgListUrl_, { responseType: 'text' }).subscribe(data => {
       let output = (<string>data).split(/\r\n|\n/);
       let headersRow = this.app.getHeaderArray(output);
-     let multi_1 = this.getGraphList(output,bookId,bookName,headersRow);
-     let multi_2 = this.getGraphList(output,queryBookId,queryBookName,headersRow);
-     let gList = [];
-     gList.push(JSON.parse(JSON.stringify(multi_1)));
-     gList.push(JSON.parse(JSON.stringify(multi_2)))
-     this.multi = gList;
-     });
+      let multi_1 = this.getGraphList(output, bookId, bookName, headersRow);
+      let multi_2 = this.getGraphList(output, queryBookId, queryBookName, headersRow);
+      let gList = [];
+      gList.push(JSON.parse(JSON.stringify(multi_1)));
+      gList.push(JSON.parse(JSON.stringify(multi_2)))
+      this.multi = gList;
+    });
 
   }
 
-  getGraphList(output:any,bookId:String,bookName:String,headersRow:any){
-    let csvArr = [];  
+  // getGraphList(output: any, bookId: String, bookName: String, headersRow: any) {
+  //   let csvArr = [];
+  //   let count = 0;
+  //   let graphList: GraphList = new GraphList();
+  //   graphList.name = bookName;
+  //   for (let i = 1; i < output.length; i++) {
+  //     let curruntRecord = (<string>output[i]).split(',');
+  //     if (curruntRecord.length == headersRow.length && (curruntRecord[1].trim() == bookId.trim())) {
+  //       //if(count == 1000){
+  //       // break;
+  //       //}
+  //       //else{
+  //       // count = count + 1;
+  //       let graphData: GraphData = new GraphData();
+  //       graphData.name = curruntRecord[0].trim();
+  //       graphData.value = curruntRecord[2].trim();
+  //       const myObjStr = JSON.parse(JSON.stringify(graphData));
+  //       csvArr.push(myObjStr);
+  //       //} 
+  //     }
+  //   }
+  //   graphList.series = csvArr;
+  //   return graphList;
+  // }
+
+  getGraphList(output: any, bookId: String, bookName: String, headersRow: any) {
+    let csvArr = [];
     let count = 0;
-    let name = bookId;
-    let graphList: GraphList = new GraphList();  
+    let graphList: GraphList = new GraphList();
     graphList.name = bookName;
-    for (let i = 1; i < output.length; i++) {  
+    for (let i = 1; i < output.length; i++) {
       let curruntRecord = (<string>output[i]).split(';');
-      if (curruntRecord.length == headersRow.length && (curruntRecord[0].trim() == bookId.trim() )) { 
-        //if(count == 1000){
-          // break;
-        //}
-        //else{
-         // count = count + 1;
-          let graphData: GraphData = new GraphData();  
-          graphData.name = curruntRecord[1].trim();  
-          graphData.value = curruntRecord[2].trim();   
-          const myObjStr =JSON.parse(JSON.stringify(graphData));
-          csvArr.push(myObjStr); 
-        //} 
+      if (curruntRecord.length == headersRow.length && (curruntRecord[0].trim() == bookId.trim())) {
+        let count = 0;
+        var obj = (<string>output[i]).split(';').reduce((result, token) => {
+          let graphData: GraphData = new GraphData();
+          graphData.name = count;
+          graphData.value = token;
+          const myObjStr = JSON.parse(JSON.stringify(graphData));
+          count = count + 1;
+          if (graphData.name != 0) {
+            csvArr.push(myObjStr);
+          }
+          return myObjStr;
+        }, {});
       }
     }
-    graphList.series = csvArr;  
+    graphList.series = csvArr;
     return graphList;
-}
+  }
 
-public getTopics(): Observable<any>{
-  return  this.http.get(this.topicsURL,{responseType: 'text'});
-}
+  public getTopics(): Observable<any> {
+    return this.http.get(this.topicsURL, { responseType: 'text' });
+  }
 
-getTopicsList(output:any,queryBookId:String,currentBookID:String){
-  let clouddataList =[];  
-  let color:string;
-    for (let i = 1; i < output.length; i++) {  
+  getTopicsList(output: any, queryBookId: String, currentBookID: String) {
+    let clouddataList = [];
+    let color: string;
+    for (let i = 1; i < output.length; i++) {
       let curruntRecord = (<string>output[i]).split(',');
-      if(curruntRecord[0].trim()== currentBookID.trim()){color = "#6b8e23"}
-      if(curruntRecord[0].trim()== queryBookId.trim()){color = "#191970"}
-      if ((curruntRecord[0].trim() == queryBookId.trim())||(curruntRecord[0].trim()== currentBookID.trim())) { 
-        for(let k = 1;k < curruntRecord.length; k++){
-          let wordArray =curruntRecord[k].split(' '); 
-          for(let j = 0;j<wordArray.length;j++)
-          {
-            let cloudData: WordCloudData = new WordCloudData();  
-            cloudData.text = wordArray[j].trim();  
-            cloudData.weight = 10 - j; 
+      if (curruntRecord[0].trim() == currentBookID.trim()) { color = "#6b8e23" }
+      if (curruntRecord[0].trim() == queryBookId.trim()) { color = "#191970" }
+      if ((curruntRecord[0].trim() == queryBookId.trim()) || (curruntRecord[0].trim() == currentBookID.trim())) {
+        for (let k = 1; k < curruntRecord.length; k++) {
+          let wordArray = curruntRecord[k].split(' ');
+          for (let j = 0; j < wordArray.length; j++) {
+            let cloudData: WordCloudData = new WordCloudData();
+            cloudData.text = wordArray[j].trim();
+            cloudData.weight = 10 - j;
             cloudData.color = color;
-            const myObjStr =JSON.parse(JSON.stringify(cloudData)); 
+            const myObjStr = JSON.parse(JSON.stringify(cloudData));
             clouddataList.push(myObjStr);
           }
 
         }
-     
+
       }
     }
-    console.log(clouddataList);
     return clouddataList;
-}
+  }
 }
 
 

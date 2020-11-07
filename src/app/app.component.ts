@@ -1,12 +1,11 @@
-import { Component, Injectable, OnInit, ViewChild, Input , EventEmitter} from '@angular/core';
+import { Component, Injectable, OnInit, ViewChild, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CsvReader, simBooks, bookList, UserEvent, GlobalFeatureArray} from './csv-reader';
 import { ConfigService }  from './search.service';
 import { trigger, state, animate, transition, style } from '@angular/animations';
 import { Subscription,Observable } from 'rxjs';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Routes, Router } from '@angular/router';
-import { MatRadioChange, MatRadioButton} from '@angular/material/radio';
+import { Router } from '@angular/router';
+import { MatRadioButton} from '@angular/material/radio';
 
 
 
@@ -47,11 +46,11 @@ export class AppComponent implements OnInit{
   showSpinner: boolean = false;
   currentBookId: String;
   currentBookName: String;
+  language: String = 'bt';
 
   constructor(
     private http: HttpClient,
     private configService: ConfigService,
-    private sanitizer:DomSanitizer,
     private router: Router){
     this.apiUrl = ConfigService.Settings.url.apiUrl;
     this.http.get(this.genreCsvUrl,{responseType: 'text'}).subscribe(data => {
@@ -73,14 +72,14 @@ export class AppComponent implements OnInit{
   
   //Urls to fetch CSV file containg genre and book List
   genreCsvUrl = 'assets/csv/GENRE.csv';
-  booksCsvUrl = 'assets/csv/Final_Booklist.csv';
+  booksCsvUrl = 'assets/csv/master2000_UI.csv';
   summaryUrl = 'assets/summary/';
 
   genre =[];
   public books = [];
   queryBookId: String;
   queryBookName: String;
-  genreName: String;
+  genreName: string;
   public globalFeatureList = [];
   public dataList:simBooks[] = new Array();
   userEvents: UserEvent = new UserEvent();
@@ -100,6 +99,7 @@ export class AppComponent implements OnInit{
       let headersRow = this.getHeaderArray(this.output);
       this.authors = this.getAuthorsperGenre(this.output,selectedValue,headersRow.length);
       this.books = this.getBooksRecordsArrayFromCSVFile(this.output,selectedValue,headersRow.length); 
+      console.log("BookList Count :",this.books.length);
       this.queryBookId = '';
      });
    
@@ -144,15 +144,31 @@ export class AppComponent implements OnInit{
     let csvArr = [];  
     for (let i = 1; i < output.length; i++) {  
       let curruntRecord = (<string>output[i]).split(';'); 
-      if (curruntRecord.length == headersRow && (curruntRecord[4].trim() == selectedValue.trim() || selectedValue == "All" )) {  
+      if (curruntRecord.length == headersRow && (curruntRecord[6].trim() == selectedValue.trim() || selectedValue == "All" )) {  
+        if(this.language != 'bt')
+        {
+          if((curruntRecord[2].trim() == this.language)){
         let csvRecord: CsvReader = new CsvReader();  
         csvRecord.id = i;
         csvRecord.bookId = 'pg'+curruntRecord[0].trim();  
         csvRecord.name = curruntRecord[1].trim();  
-        csvRecord.genre = curruntRecord[4].trim();  
-        csvRecord.authorname = curruntRecord[3].trim().replace("|","");  
+        csvRecord.genre = curruntRecord[6].trim();  
+        csvRecord.authorname = curruntRecord[4].trim().replace("|","");  
         const myObjStr =JSON.parse(JSON.stringify(csvRecord));
         csvArr.push(myObjStr);  
+          }
+        }
+        else
+        {
+          let csvRecord: CsvReader = new CsvReader();  
+        csvRecord.id = i;
+        csvRecord.bookId = 'pg'+curruntRecord[0].trim();  
+        csvRecord.name = curruntRecord[1].trim();  
+        csvRecord.genre = curruntRecord[6].trim();  
+        csvRecord.authorname = curruntRecord[4].trim().replace("|","");  
+        const myObjStr =JSON.parse(JSON.stringify(csvRecord));
+        csvArr.push(myObjStr);  
+        }
       }  
     }  
     return csvArr; 
@@ -171,13 +187,14 @@ export class AppComponent implements OnInit{
    this.p = 1;
     this.loading = true;
     this.showSpinner = true;
+    this.errormsg = false;
     this.globalFeatureList = [];
     this.dataList =[];
-    this.http.get<bookList[]>( this.apiUrl + 'simbooks' + '/' + this.queryBookId + '/'+ this.topK + '/' + 'system').subscribe(data =>{
+    this.http.get<bookList[]>( this.apiUrl + 'simbooks' + '/' + this.queryBookId + '/'+ this.topK + '/' + this.language).subscribe(data =>{
     this.dataList = JSON.parse(JSON.stringify(data["bookUI"]));
     let testStr  = data["globalFeature"];
     this.globalFeatureList = this.getinfo(testStr);
-    console.log(this.globalFeatureList);
+    console.log(data["bookUI"]);
     this.showSpinner = false;
     this.isShow = false;
   },error => {
@@ -291,11 +308,13 @@ goNext(event) {
 }
 
 languageChange(event) {
- 
+  this.auto.clear();
+  this.auto.close();
   let mrButton: MatRadioButton = event.source;
-  console.log(mrButton.value);
+  this.language = mrButton.value;
+  console.log("Selected Language is :", this.language );
   console.log(mrButton.checked);
-  console.log(mrButton.inputId);
+  this. filterChanged(this.genreName);
 } 
 
 getinfo(testStr:String){

@@ -1,18 +1,6 @@
+<!doctype html>
 <html>
-<head>
-  <style>
-    .ng-autocomplete {
-    width: 100%;
-    }
-    .bootstrap-select>.dropdown-toggle{
-      height: 40px;
-    }
-button{
-  height: 40px;
-}
-
-  </style>
-</head>
+  <meta charset="UTF-8">
 <body>
   <mat-progress-bar  mode="indeterminate" *ngIf="showSpinner"></mat-progress-bar>
       <nav class="navbar navbar-inverse">
@@ -34,11 +22,11 @@ button{
 
 <div class="container" style="padding-top: 1.5vw;">
   <mat-card>
-    <!--<mat-radio-group aria-label="Select an option" (change)="languageChange($event)" style="color: black;letter-spacing: 0.2em;"> Language of Book:
+     <mat-radio-group aria-label="Select an option" (change)="languageChange($event)" style="color: black;letter-spacing: 0.2em;"> Language of Book:
       <mat-radio-button value="en" selected>English</mat-radio-button>
       <mat-radio-button value="de">German</mat-radio-button>
-      <mat-radio-button value="" checked>Both</mat-radio-button>
-    </mat-radio-group>-->
+      <mat-radio-button value="bt" checked>Both</mat-radio-button>
+    </mat-radio-group>
   <div class="row">
     <div class="col-md-4">
       <select class="form-control selectpicker"  title="Select Genre"  data-live-search="true" (change)="filterChanged($event.target.value)" [disabled]="isDisabled">
@@ -83,12 +71,16 @@ button{
     </div>
   </div>
 </mat-card>
-
-
+<!--div class="ad" style="background-image: linear-gradient(#fff 65%, #e6e6e6);">
+  <h2> Deciding what to read next?</h2>
+  <a><img  src="/assets/img/book_covers/pg11.jpg"></a>
+  <a><img  src="/assets/img/book_covers/pg12.jpg"></a>
+  <a><img  src="/assets/img/book_covers/pg16.jpg"></a>
+</div>-->
 <div *ngIf="errormsg" class="alert alert-danger fade in"><a href="#" class="close" (click)="alertClose()" aria-label="close">&times;</a>Server error :(</div>
 <router-outlet></router-outlet> 
 <div *ngIf = "!isShow"  id="collapseExample" style="background-image: linear-gradient(#fff 65%, #e6e6e6);padding-top: 0.5vw;" >
-  <div class="toast" >Why are these books related?
+  <div class="toast" >Why these books are related?
     <a *ngFor="let g of globalFeatureList" data-toggle="tooltip" data-placement="bottom" title="{{g.tooltip}}"> 
       {{ g.name }}
     </a>
@@ -108,7 +100,7 @@ button{
                     <span class="dot"></span>
                     <span>{{data.summary}}</span>
                     </p>
-                    Discover more here
+                    Discover more here....
                     <br>
                     <a (click)="goNext($event)" [attr.data-filedata]="data.id" [attr.data-fileValue]="data.name"> Graphical Comparision</a>
                     <br>
@@ -124,11 +116,11 @@ button{
                </div>
                <div class="align-items-center align-content-center col-md-1 border-left mt-1">
                    <!--<h6 class="text-success" style="padding-top: 1.5vw;">Free Download</h6>-->
-                   <div class="d-flex flex-column mt-4" style="padding-top: 5vw;">
+                   <!-- <div class="d-flex flex-column mt-4" style="padding-top: 5vw;">
                     <button class="btn btn-outline-primary btn-sm mt-2" type="button" value="{{data.name}}"  [attr.data-filedata]="data.id" (click)="sanitize($event)">
                       <span class="glyphicon glyphicon-download"></span> Download</button>
                       
-                         </div> 
+                         </div>  -->
                             
                </div>  
                 
@@ -188,6 +180,7 @@ button{
   </div>
 </div>
 
+ <!-- [siteKey]="'6LcXo6oZAAAAAPSBsIknF6j-er0D7cU5Zxb4R1xZ'" -->
  
 
 

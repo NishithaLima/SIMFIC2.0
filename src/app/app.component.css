@@ -100,3 +100,22 @@ color: black;
   line-height: 18px;
 }
 
+a{
+  cursor: pointer;
+}
+
+.ad img{
+  margin: 1vw;
+}
+i{
+  cursor: pointer;
+}
+.ng-autocomplete {
+  width: 100%;
+  }
+  .bootstrap-select>.dropdown-toggle{
+    height: 40px;
+  }
+button{
+height: 40px;
+}
