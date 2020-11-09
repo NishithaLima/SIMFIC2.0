@@ -257,7 +257,7 @@ saveUserClickEvent()
   let temp: String;
   temp =  this.userEventData +',' +  (new Date()).toString() + ';';
   this.configService.updateUserClickEvents(temp,this.apiUrl).subscribe(
-    data => console.log(temp),
+    data => console.log(data),
     error => console.log(error));
   this.userEventData = '';
 }
