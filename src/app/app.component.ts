@@ -99,7 +99,7 @@ export class AppComponent implements OnInit{
       let headersRow = this.getHeaderArray(this.output);
       this.authors = this.getAuthorsperGenre(this.output,selectedValue,headersRow.length);
       this.books = this.getBooksRecordsArrayFromCSVFile(this.output,selectedValue,headersRow.length); 
-      console.log("BookList Count :",this.books.length);
+      // console.log("BookList Count :",this.books.length);
       this.queryBookId = '';
      });
    
@@ -113,7 +113,7 @@ export class AppComponent implements OnInit{
     changeBooks(item){
       this.authors = item;
       this.books = this.books.filter(({ authorname }) => authorname.search(item) == -1); 
-      console.log(this.books);
+     // console.log(this.books);
     }
 
   ngOnInit(): void {
@@ -194,7 +194,7 @@ export class AppComponent implements OnInit{
     this.dataList = JSON.parse(JSON.stringify(data["bookUI"]));
     let testStr  = data["globalFeature"];
     this.globalFeatureList = this.getinfo(testStr);
-    console.log(data["bookUI"]);
+    //console.log(data["bookUI"]);
     this.showSpinner = false;
     this.isShow = false;
   },error => {
@@ -226,7 +226,7 @@ export class AppComponent implements OnInit{
       }
     }  
   }  
-  console.log(Array.from(new Set(authorsList)));
+  // console.log(Array.from(new Set(authorsList)));
   return authorsList; 
  }
  //Bootstrap Modal Open event
@@ -234,7 +234,7 @@ show(event)
 {
   let bookId = event.target.getAttribute('data-filedata');
   let buttonText: String = event.target.textContent;
-  console.log('ButtonText :',buttonText);
+  
   if(buttonText.trim() == "Read more")
   {
   event.target.textContent = "Read less";
@@ -275,7 +275,7 @@ getArrayNumber = function(num) {
  return array;   
 };
 sanitize(event){
-  console.log("assets/epub/"+event.target.getAttribute('data-filedata') +".epub");
+  // console.log("assets/epub/"+event.target.getAttribute('data-filedata') +".epub");
   let link = document.createElement("a");
   link.download = event.target.value;
   link.href = "assets/epub/"+ event.target.getAttribute('data-filedata') +".epub" ;
@@ -312,15 +312,12 @@ languageChange(event) {
   this.auto.close();
   let mrButton: MatRadioButton = event.source;
   this.language = mrButton.value;
-  console.log("Selected Language is :", this.language );
-  console.log(mrButton.checked);
   this. filterChanged(this.genreName);
 } 
 
 getinfo(testStr:String){
   let tempList =[];
   let gtemp = (testStr.substring(testStr.indexOf('?') + 1)).split(',');
-  console.log(gtemp);
   if( tempList.length != null){
   for (let i = 0; i < gtemp.length; i++)
     {
