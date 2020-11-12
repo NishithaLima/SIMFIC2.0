@@ -52,7 +52,6 @@ export class AppComponent implements OnInit{
     private http: HttpClient,
     private configService: ConfigService,
     private router: Router){
-    this.apiUrl = ConfigService.Settings.url.apiUrl;
     this.http.get(this.genreCsvUrl,{responseType: 'text'}).subscribe(data => {
     this.output = data.split(/\r\n|\n/);
     this.genre = this.getGenreRecordsArrayFromCSVFile(this.output); 
@@ -90,6 +89,8 @@ export class AppComponent implements OnInit{
   gexplain:String[];
 
   showCaptcha:boolean = true;
+
+  system:string;
  
   filterChanged(selectedValue:string){
     this.genreName = selectedValue;
@@ -125,6 +126,9 @@ export class AppComponent implements OnInit{
   },1000)
 
     $("#recaptchModal").modal('show');
+
+    this.system = "systemA";
+    this.apiUrl = ConfigService.Settings.url.aUrl;
    
    
   }
@@ -286,6 +290,20 @@ sanitize(event){
 
 selecttopK(event: any){
   this.topK = event.target.value;
+}
+
+selectSystem(event: any){
+this.system = event.target.value;
+if(this.system === "systemB"){
+  this.apiUrl = ConfigService.Settings.url.bUrl
+} else
+if(this.system === "systemC"){
+  this.apiUrl = ConfigService.Settings.url.cUrl
+} else
+if(this.system === "systemA"){
+  this.apiUrl = ConfigService.Settings.url.aUrl
+}
+console.log('System :', this.system);
 }
 
 //Success for Recaptcha

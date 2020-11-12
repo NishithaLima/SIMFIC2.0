@@ -33,7 +33,9 @@ export class UserEvent{
 
 export class Config {
     url: {
-        apiUrl: string;
+		aUrl: string,
+		bUrl: string,
+		cUrl: string	
     };
 }
 

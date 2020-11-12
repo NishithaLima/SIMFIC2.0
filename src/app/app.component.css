@@ -123,3 +123,7 @@ i{
 button{
 height: 40px;
 }
+
+::ng-deep .btn {
+  padding: 7px 12px !important;
+}

@@ -1,144 +1,167 @@
 <!doctype html>
 <html>
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
+
 <body>
-  <mat-progress-bar  mode="indeterminate" *ngIf="showSpinner"></mat-progress-bar>
-      <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="/assets/img/IconImage.png"  target="_blank" style="padding-top: 0px;"><img src="/assets/img/IconImage.png" alt="Avatar" style="height: 50px"></a>
-          </div>
-          
-          <div class="collapse navbar-collapse" id="myNavbar">
-            <h1 class="navbar-text">Similarity in Fiction - A Book Search Engine</h1>
-            <ul class="nav navbar-nav navbar-right">
-              <li data-toggle="modal" data-target="#exampleModalScrollable"><a href="#"><span class="glyphicon glyphicon-new-window"></span> About</a></li>
-              <li><a href="#" (click)="Reset()"><span class="glyphicon glyphicon-repeat"></span> Reset</a></li>
-            </ul>
+  <mat-progress-bar mode="indeterminate" *ngIf="showSpinner"></mat-progress-bar>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/assets/img/IconImage.png" target="_blank" style="padding-top: 0px;"><img
+            src="/assets/img/IconImage.png" alt="Avatar" style="height: 50px"></a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <h1 class="navbar-text">Similarity in Fiction - A Book Search Engine</h1>
+        <ul class="nav navbar-nav navbar-right">
+
+          <li class="nav-item dropdown" style="margin-top: 5px;margin-right: 1rem;">
+            <select class="selectpicker" data-width="100%" (change)="selectSystem($event)">
+              <option value="systemA" selected="selected">System A</option>
+              <option value="systemB">System B</option>
+              <option value="systemC">System C</option>
+            </select>
+          </li>
+          <li data-toggle="modal" data-target="#exampleModalScrollable"><a href="#"><span
+                class="glyphicon glyphicon-new-window"></span> About</a></li>
+          <li><a href="#" (click)="Reset()"><span class="glyphicon glyphicon-repeat"></span> Reset</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="container" style="padding-top: 1.5vw;">
+    <mat-card>
+      <mat-radio-group aria-label="Select an option" (change)="languageChange($event)"
+        style="color: black;letter-spacing: 0.2em;"> Language of Book:
+        <mat-radio-button value="en" selected>English</mat-radio-button>
+        <mat-radio-button value="de">German</mat-radio-button>
+        <mat-radio-button value="bt" checked>Both</mat-radio-button>
+      </mat-radio-group>
+      <div class="row">
+        <div class="col-md-4">
+          <select class="form-control selectpicker" title="Select Genre" data-live-search="true"
+            (change)="filterChanged($event.target.value)" [disabled]="isDisabled">
+
+            <option *ngFor="let x of genre" value="{{x.name}}" [selected]="x.name==='All'">{{x.name}}</option>
+          </select>
+
+        </div>
+
+        <div class="col-md-5">
+
+          <div class="ng-autocomplete" style="height: 2.2vw;">
+            <ng-autocomplete #auto [data]="books" [disabled]="isDisabled" [searchKeyword]="keyword"
+              [itemTemplate]="itemTemplate" placeHolder="Query Book" [notFoundTemplate]="notFoundTemplate"
+              required="true" (selected)='selectEvent($event)' (keyup.enter)="focusableSubmit.click()">
+            </ng-autocomplete>
+
+            <ng-template #itemTemplate let-item>
+              <a href="#">
+                <span [innerHTML]="item.name"></span> ,
+                <small><span [innerHTML]="item.authorname"></span></small>
+              </a>
+            </ng-template>
+
+            <ng-template #notFoundTemplate let-notFound>
+              <div [innerHTML]="notFound"></div>
+            </ng-template>
           </div>
         </div>
-      </nav>
-
-
-<div class="container" style="padding-top: 1.5vw;">
-  <mat-card>
-     <mat-radio-group aria-label="Select an option" (change)="languageChange($event)" style="color: black;letter-spacing: 0.2em;"> Language of Book:
-      <mat-radio-button value="en" selected>English</mat-radio-button>
-      <mat-radio-button value="de">German</mat-radio-button>
-      <mat-radio-button value="bt" checked>Both</mat-radio-button>
-    </mat-radio-group>
-  <div class="row">
-    <div class="col-md-4">
-      <select class="form-control selectpicker"  title="Select Genre"  data-live-search="true" (change)="filterChanged($event.target.value)" [disabled]="isDisabled">
-       
-        <option *ngFor="let x of genre" value="{{x.name}}" [selected]="x.name==='All'" >{{x.name}}</option>
-      </select>
-
-    </div>
-  
-    <div class="col-md-5">
-    
-      <div class="ng-autocomplete" style="height: 2.2vw;" >
-        <ng-autocomplete #auto [data]="books" [disabled]="isDisabled" [searchKeyword]="keyword"  [itemTemplate]="itemTemplate"  placeHolder="Query Book"
-            [notFoundTemplate]="notFoundTemplate" required="true" (selected)='selectEvent($event)' (keyup.enter)="focusableSubmit.click()" >
-        </ng-autocomplete>
-     
-        <ng-template #itemTemplate let-item>
-          <a href="#">
-              <span [innerHTML]="item.name"></span> ,
-              <small><span [innerHTML]="item.authorname"></span></small>
-          </a>
-      </ng-template>
-     
-        <ng-template #notFoundTemplate let-notFound>
-            <div [innerHTML]="notFound"></div>
-        </ng-template>
-      </div>  
-    </div>
-     <div class="col-md-1">
-      <select class="selectpicker" data-width="85%" (change)="selecttopK($event)" [disabled]="isDisabled">
-        <option value="5" selected disabled>Top K Results</option>
-        <option value="10" selected="selected" >10</option>
-        <option value="15"  >15</option>
-        <option value="20"  >20</option>
-      </select>
-    </div> 
-    <div class="col-md-2">
-      <button  #focusableSubmit type="submit" class="btn btn-primary" (click)="myClickFunction()" [disabled]="isDisabled">
-         Search 
-         <span class="glyphicon glyphicon-search"></span>
-      </button>
-    </div>
-  </div>
-</mat-card>
-<!--div class="ad" style="background-image: linear-gradient(#fff 65%, #e6e6e6);">
+        <div class="col-md-1">
+          <select class="selectpicker" data-width="85%" (change)="selecttopK($event)" [disabled]="isDisabled">
+            <option value="5" selected disabled>Top K Results</option>
+            <option value="10" selected="selected">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button #focusableSubmit type="submit" class="btn btn-primary" (click)="myClickFunction()"
+            [disabled]="isDisabled">
+            Search
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </div>
+      </div>
+    </mat-card>
+    <!--div class="ad" style="background-image: linear-gradient(#fff 65%, #e6e6e6);">
   <h2> Deciding what to read next?</h2>
   <a><img  src="/assets/img/book_covers/pg11.jpg"></a>
   <a><img  src="/assets/img/book_covers/pg12.jpg"></a>
   <a><img  src="/assets/img/book_covers/pg16.jpg"></a>
 </div>-->
-<div *ngIf="errormsg" class="alert alert-danger fade in"><a href="#" class="close" (click)="alertClose()" aria-label="close">&times;</a>Server error :(</div>
-<router-outlet></router-outlet> 
-<div *ngIf = "!isShow"  id="collapseExample" style="background-image: linear-gradient(#fff 65%, #e6e6e6);padding-top: 0.5vw;" >
-  <div class="toast" >Why these books are related?
-    <a *ngFor="let g of globalFeatureList" data-toggle="tooltip" data-placement="bottom" title="{{g.tooltip}}"> 
-      {{ g.name }}
-    </a>
-  </div>
-  <div class="container mt-5 mb-5">
-   <div class="d-flex justify-content-center row">
-       <div class="col-md-10">
-           <div class="row p-2 bg-white border rounded" *ngFor="let data of dataList  | paginate: { itemsPerPage: 5, currentPage: p }" >
-               <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image"  src="/assets/img/book_covers/{{data.id}}.jpg"></div>
-               <div class="col-md-8 mt-1">
-                   <h2  class="font-weight-bold" >{{data.name}}</h2>
-                   <div class="d-flex flex-row">
-                     <span *ngFor="let star of getNumber(data.rank)" class="glyphicon glyphicon-star"></span>
-                   </div>
-                   <div class="mt-1 mb-1 spec-1">
-                     <p class="font-italic">
+    <div *ngIf="errormsg" class="alert alert-danger fade in"><a href="#" class="close" (click)="alertClose()"
+        aria-label="close">&times;</a>Server error :(</div>
+    <router-outlet></router-outlet>
+    <div *ngIf="!isShow" id="collapseExample"
+      style="background-image: linear-gradient(#fff 65%, #e6e6e6);padding-top: 0.5vw;">
+      <div class="toast">Why these books are related?
+        <a *ngFor="let g of globalFeatureList" data-toggle="tooltip" data-placement="bottom" title="{{g.tooltip}}">
+          {{ g.name }}
+        </a>
+      </div>
+      <div class="container mt-5 mb-5">
+        <div class="d-flex justify-content-center row">
+          <div class="col-md-10">
+            <div class="row p-2 bg-white border rounded"
+              *ngFor="let data of dataList  | paginate: { itemsPerPage: 5, currentPage: p }">
+              <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image"
+                  src="/assets/img/book_covers/{{data.id}}.jpg"></div>
+              <div class="col-md-8 mt-1">
+                <h2 class="font-weight-bold">{{data.name}}</h2>
+                <div class="d-flex flex-row">
+                  <span *ngFor="let star of getNumber(data.rank)" class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="mt-1 mb-1 spec-1">
+                  <p class="font-italic">
                     <span class="dot"></span>
                     <span>{{data.summary}}</span>
-                    </p>
-                    Discover more here....
-                    <br>
-                    <a (click)="goNext($event)" [attr.data-filedata]="data.id" [attr.data-fileValue]="data.name"> Graphical Comparision</a>
-                    <br>
-                    <a  [attr.value]="data.name" [attr.data-filedata]="data.id" data-toggle="collapse" aria-expanded="false"  (click) = "show($event)">Read more</a>
-                    <div class="col-md-12">
-                      <div class="collapse" id="{{data.id}}">
-                        <div class="card">
-                          {{data.htmlPath}}
-                        </div>
-                      </div>    
-                     </div>     
+                  </p>
+                  Discover more here....
+                  <br>
+                  <a (click)="goNext($event)" [attr.data-filedata]="data.id" [attr.data-fileValue]="data.name">
+                    Graphical Comparision</a>
+                  <br>
+                  <a [attr.value]="data.name" [attr.data-filedata]="data.id" data-toggle="collapse"
+                    aria-expanded="false" (click)="show($event)">Read more</a>
+                  <div class="col-md-12">
+                    <div class="collapse" id="{{data.id}}">
+                      <div class="card">
+                        {{data.htmlPath}}
+                      </div>
                     </div>
-               </div>
-               <div class="align-items-center align-content-center col-md-1 border-left mt-1">
-                   <!--<h6 class="text-success" style="padding-top: 1.5vw;">Free Download</h6>-->
-                   <!-- <div class="d-flex flex-column mt-4" style="padding-top: 5vw;">
+                  </div>
+                </div>
+              </div>
+              <div class="align-items-center align-content-center col-md-1 border-left mt-1">
+                <!--<h6 class="text-success" style="padding-top: 1.5vw;">Free Download</h6>-->
+                <!-- <div class="d-flex flex-column mt-4" style="padding-top: 5vw;">
                     <button class="btn btn-outline-primary btn-sm mt-2" type="button" value="{{data.name}}"  [attr.data-filedata]="data.id" (click)="sanitize($event)">
                       <span class="glyphicon glyphicon-download"></span> Download</button>
                       
                          </div>  -->
-                            
-               </div>  
-                
-               
-           </div>           
-       </div>
-   </div>
+
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+
   </div>
-  <pagination-controls (pageChange)="p = $event"></pagination-controls>
- </div>
- 
-</div>
 </body>
+
 </html>
 
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -148,10 +171,14 @@
         </button>
       </div>
       <div class="modal-body">
-        It is book retrieval system built on hand crafted features extracted from English and German fiction books. System supports users with global textual explanation for top items in the ranked list. Explanation tells the user what are the important features that are probably responsible.
-      Currently system contains toy set data of books. You can select a query book from the dropdown based on Genre. System gives you top relevant books for your selected query book. It also has <u>graphical explaination</u> for each book explaining the emotion distribution curve against query book.
-      <br>
-      <img id="myImg" src="/assets/img/explain.png" style="width: 100%;" alt="Snow">
+        It is book retrieval system built on hand crafted features extracted from English and German fiction books.
+        System supports users with global textual explanation for top items in the ranked list. Explanation tells the
+        user what are the important features that are probably responsible.
+        Currently system contains toy set data of books. You can select a query book from the dropdown based on Genre.
+        System gives you top relevant books for your selected query book. It also has <u>graphical explaination</u> for
+        each book explaining the emotion distribution curve against query book.
+        <br>
+        <img id="myImg" src="/assets/img/explain.png" style="width: 100%;" alt="Snow">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
@@ -163,31 +190,25 @@
 
 
 <!-- Modal for recaptcha -->
-<div  class="modal fade" id="recaptchModal" tabindex="-1" role="dialog" aria-labelledby="reCaptchaTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static" style="padding-top: 5vw;">
+<div class="modal fade" id="recaptchModal" tabindex="-1" role="dialog" aria-labelledby="reCaptchaTitle"
+  aria-hidden="true" data-keyboard="false" data-backdrop="static" style="padding-top: 5vw;">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content" style="background-image: linear-gradient(#fff 65%, #e6e6e6) ;">
       <div class="modal-body text-center">
         <h2 style="font-family: cursive;">WANT TO READ SIMILAR FICTION BOOKS? GET STARTED ....</h2>
-        <div style="padding: 10%;padding-left: 24%;"> 
-          <ngx-recaptcha2 #captchaElem
-          [siteKey]="'6LcXo6oZAAAAAPSBsIknF6j-er0D7cU5Zxb4R1xZ'"
-          (success)="handleSuccess($event)"
-          [useGlobalDomain]="false">
-        </ngx-recaptcha2>
-      </div>
+        <div style="padding: 10%;padding-left: 24%;">
+          <ngx-recaptcha2 #captchaElem 
+          [siteKey]="'6LcxIOIZAAAAANTkaATzkZOiJf7MS8P2Mz9UEoYG'"
+            (success)="handleSuccess($event)" [useGlobalDomain]="false">
+          </ngx-recaptcha2>
+        </div>
       </div>
     </div>
   </div>
-</div> 
+</div>
 
- <!-- [siteKey]="'6LcXo6oZAAAAAPSBsIknF6j-er0D7cU5Zxb4R1xZ'" -- Local-->
-   <!-- [siteKey]="'6LcXo6oZAAAAAPSBsIknF6j-er0D7cU5Zxb4R1xZ'" -- fiction-ui-app-->
-   <!-- [siteKey]="'6LcIoeAZAAAAABAZ-SgSlKZgxIu44guhc4ZJulVi'" --fiction-suchlauf -->
-   <!-- [siteKey]="'6Lc6reAZAAAAAAWyIosq9AwuiP4VGVPBkPZF0BVT'" --fiction-search-->
- 
-
-
-
- 
-
-
+<!-- [siteKey]="6LeOZ4YUAAAAAJ8clQYNtOXNDHsd58KZHyJeILk6'" -- Local-->
+<!-- [siteKey]="'6LcXo6oZAAAAAPSBsIknF6j-er0D7cU5Zxb4R1xZ'" -- fiction-ui-app-->
+<!-- [siteKey]="'6LcIoeAZAAAAABAZ-SgSlKZgxIu44guhc4ZJulVi'" --fiction-suchlauf -->
+<!-- [siteKey]="'6Lc6reAZAAAAAAWyIosq9AwuiP4VGVPBkPZF0BVT'" --fiction-search-->
+<!-- [siteKey]="'6LcxIOIZAAAAANTkaATzkZOiJf7MS8P2Mz9UEoYG'" --book-suche-->
