@@ -1,7 +1,7 @@
 {
     "url":{
     "aUrl": "https://fiction-app.herokuapp.com/",
-    "bUrl":"https://fiction-search-app.herokuapp.com/",
-    "cUrl":"https://fiction-suchlauf-app.herokuapp.com/"
+    "bUrl":"https://fiction-suchlauf-app.herokuapp.com/",
+    "cUrl":"https://fiction-search-app.herokuapp.com/"
     }
 }
