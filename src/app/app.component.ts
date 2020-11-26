@@ -9,7 +9,6 @@ import { MatRadioButton} from '@angular/material/radio';
 
 
 
-
 declare var $: any;
 
 @Component({
@@ -335,7 +334,7 @@ languageChange(event) {
 
 getinfo(testStr:String){
   let tempList =[];
-  let gtemp = (testStr.substring(testStr.indexOf('?') + 1)).split(',');
+  let gtemp = (testStr.substring(testStr.indexOf('?') + 1)).trim().split(',');
   if( tempList.length != null){
   for (let i = 0; i < gtemp.length; i++)
     {
@@ -347,7 +346,7 @@ getinfo(testStr:String){
       }
       else {
       let global: GlobalFeatureArray = new GlobalFeatureArray();
-      global.name = ','+gtemp[i];
+      global.name = (','+ gtemp[i]).trim();
       global.tooltip = this.configService.getGlobalFeatureExplaination(gtemp[i]);
       tempList.push(global); 
       }

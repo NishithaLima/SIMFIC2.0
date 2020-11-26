@@ -98,9 +98,7 @@
     <div *ngIf="!isShow" id="collapseExample"
       style="background-image: linear-gradient(#fff 65%, #e6e6e6);padding-top: 0.5vw;">
       <div class="toast">Why these books are related?
-        <a *ngFor="let g of globalFeatureList" data-toggle="tooltip" data-placement="bottom" title="{{g.tooltip}}">
-          {{ g.name }}
-        </a>
+        <a *ngFor="let g of globalFeatureList" data-toggle="tooltip" data-placement="bottom" title="{{g.tooltip}}">{{g.name}}</a>
       </div>
       <div class="container mt-5 mb-5">
         <div class="d-flex justify-content-center row">
