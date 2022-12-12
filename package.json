@@ -30,7 +30,7 @@
     "bootstrap-select": "^1.13.17",
     "csv-parser": "^2.3.2",
     "csv-writer": "^1.6.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "file-saver": "^2.0.2",
     "jquery": "^3.5.1",
     "ngx-captcha": "^8.0.1",
